@@ -3,7 +3,6 @@ import 'package:coachingapp/viewmodels/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/get_subscriptionCheck.dart';
 import '../utils/colors.dart';
 
 class PublicProfile extends StatefulWidget {
@@ -57,16 +56,17 @@ class _PublicProfileState extends State<PublicProfile> {
                             final subscriptionStatus =
                                 ref.watch(subscriptionProvider);
 
-                            return subscriptionStatus.when(
-                              data: (subscribed) => subscribed == true
+                            return subscriptionStatus.maybeWhen(
+                              data: (subscribed) => subscribed
                                   ? Icon(Icons.check)
                                   : GestureDetector(
-                                      onTap: () {},
+                                      onTap: () {
+                                        Auth().Subscirbe(widget.userModel.uid);
+                                        ref.refresh(subscriptionProvider);
+                                      },
                                       child: Icon(Icons.add),
                                     ),
-                              loading: () => CircularProgressIndicator(),
-                              error: (error, _) =>
-                                  Text('Error occurred: $error'),
+                              orElse: () => CircularProgressIndicator(),
                             );
                           },
                         ),

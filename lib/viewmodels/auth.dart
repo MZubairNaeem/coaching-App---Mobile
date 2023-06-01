@@ -175,7 +175,7 @@ class Auth extends ChangeNotifier {
       await _firestore
           .collection('Subscriptions')
           .doc(DateTime.now().millisecondsSinceEpoch.toString())
-          .set({'subscribee': user_id, 'subscriber': coach_id});
+          .set({'subscriber': user_id, 'subscribed': coach_id});
       return "Success";
     } catch (e) {
       return e.toString();
@@ -187,8 +187,8 @@ class Auth extends ChangeNotifier {
     try {
       var data = await _firestore
           .collection('Subscriptions')
-          .where('subscribee', isEqualTo: user_id)
-          .where('subscriber', isEqualTo: coach_id)
+          .where('subscriber', isEqualTo: user_id)
+          .where('subscribed', isEqualTo: coach_id)
           .get();
       if (data.docs.length > 0) {
         return true;

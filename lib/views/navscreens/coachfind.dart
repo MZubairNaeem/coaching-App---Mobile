@@ -74,7 +74,7 @@ class _CoachFindState extends State<CoachFind> {
           child: Consumer(
             builder: (context, ref, _) {
               // Getting coaches List
-              final coaches = ref.read(coachProvider);
+              final coaches = ref.watch(coachProvider);
               return coaches.when(
                 data: (userModelList) {
                   return CustomScrollView(

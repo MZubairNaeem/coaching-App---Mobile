@@ -1,5 +1,6 @@
 import 'package:coachingapp/providers/get_user_type.dart';
 import 'package:coachingapp/views/public_profile.dart';
+import 'package:coachingapp/views/subscribed_coaches.dart';
 import 'package:coachingapp/views/subscription/subscription.dart';
 import 'package:coachingapp/widgets/large_button_trasparent_text_left_align.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -156,11 +157,11 @@ class _ProfileState extends State<Profile> {
                           LargeButtonTransparentLeftAlignText(
                             name: "My Program",
                             onPressed: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) =>
-                              //             const PublicProfile()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const SubscribedCoaches()));
                             },
                           ),
                           LargeButtonTransparentLeftAlignText(
