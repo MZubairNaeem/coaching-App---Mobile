@@ -167,4 +167,36 @@ class Auth extends ChangeNotifier {
     }
     return res;
   }
+
+  //Subcribe to coach
+  Future<String> Subscirbe(String coach_id) async {
+    var user_id = _auth.currentUser!.uid;
+    try {
+      await _firestore
+          .collection('Subscriptions')
+          .doc(DateTime.now().millisecondsSinceEpoch.toString())
+          .set({'subscribee': user_id, 'subscriber': coach_id});
+      return "Success";
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  Future<bool> checkSubscription(String coach_id) async {
+    var user_id = _auth.currentUser!.uid;
+    try {
+      var data = await _firestore
+          .collection('Subscriptions')
+          .where('subscribee', isEqualTo: user_id)
+          .where('subscriber', isEqualTo: coach_id)
+          .get();
+      if (data.docs.length > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
 }

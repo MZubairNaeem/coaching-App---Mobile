@@ -21,8 +21,6 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-
-
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -119,7 +117,7 @@ class _ProfileState extends State<Profile> {
                                   return Column(
                                     children: [
                                       Text(
-                                       userModel.firstName,
+                                        userModel.firstName,
                                         style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
@@ -136,7 +134,10 @@ class _ProfileState extends State<Profile> {
                                     ],
                                   );
                                 },
-                                loading: () => CircularProgressIndicator(color: AppColors().primaryColor,strokeWidth: 2,),
+                                loading: () => CircularProgressIndicator(
+                                  color: AppColors().primaryColor,
+                                  strokeWidth: 2,
+                                ),
                                 error: (error, stackTrace) =>
                                     Text('Error: $error'),
                               );
@@ -155,11 +156,11 @@ class _ProfileState extends State<Profile> {
                           LargeButtonTransparentLeftAlignText(
                             name: "My Program",
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const PublicProfile()));
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) =>
+                              //             const PublicProfile()));
                             },
                           ),
                           LargeButtonTransparentLeftAlignText(
