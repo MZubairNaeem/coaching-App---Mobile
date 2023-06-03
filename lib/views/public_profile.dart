@@ -1,9 +1,14 @@
+import 'dart:typed_data';
+
 import 'package:coachingapp/models/user.dart';
 import 'package:coachingapp/viewmodels/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
+import '../providers/get_demoVideos.dart';
 import '../utils/colors.dart';
+import '../widgets/videopreview.dart';
 
 class PublicProfile extends StatefulWidget {
   final UserModel userModel;
@@ -22,12 +27,19 @@ class _PublicProfileState extends State<PublicProfile> {
 
   @override
   Widget build(BuildContext context) {
+    ScrollController _scrollController = ScrollController();
+
     final subscriptionProvider = FutureProvider<bool>((ref) async {
       final uid = widget.userModel.uid;
       final subscribed = await Auth().checkSubscription(uid);
       return subscribed;
     });
-
+    _scrollController.addListener(() {
+      if (_scrollController.position.atEdge &&
+          _scrollController.position.pixels != 0) {
+        print("object");
+      }
+    });
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -138,28 +150,49 @@ class _PublicProfileState extends State<PublicProfile> {
                   ],
                 ),
               ),
-              Expanded(
-                child: GridView.builder(
-                  itemCount: 100,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    childAspectRatio: 1.0,
-                    mainAxisSpacing: 8.0,
-                    crossAxisSpacing: 8.0,
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      // height: 200,
-                      decoration: BoxDecoration(
-                        image: const DecorationImage(
-                          image: AssetImage('assets/img.png'),
-                          fit: BoxFit.cover,
+              Consumer(
+                builder: (context, ref, __) {
+                  final videos = ref.watch(demoVideos);
+                  final scrollController = ScrollController();
+
+                  scrollController.addListener(() {
+                    if (scrollController.position.pixels ==
+                            scrollController.position.maxScrollExtent &&
+                        scrollController.position.outOfRange) {
+                      ref.refresh(demoVideos); // Trigger the refresh operation
+                    }
+                  });
+                  return videos.maybeWhen(
+                    data: (videos) => Expanded(
+                      child: GridView.builder(
+                        itemCount: videos.length,
+                        controller: scrollController,
+                        physics: const BouncingScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4,
+                          childAspectRatio: 1.0,
+                          mainAxisSpacing: 8.0,
+                          crossAxisSpacing: 8.0,
                         ),
-                        borderRadius: BorderRadius.circular(10),
+                        itemBuilder: (BuildContext context, int index) {
+                          return VideoPreview(
+                            VideoURL: videos[index].videoUrl!,
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
+                    ),
+                    loading: () => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    error: (error, stackTrace) => const Center(
+                      child: Text("Error"),
+                    ),
+                    orElse: () => const Center(
+                      child: Text("No Videos"),
+                    ),
+                  );
+                },
               ),
             ],
           ),

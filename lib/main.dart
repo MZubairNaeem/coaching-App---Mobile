@@ -63,11 +63,10 @@ class _MyAppState extends State<MyApp> {
               if (snapshot.connectionState == ConnectionState.active) {
                 if (snapshot.hasData) {
                   if (finalKey == 'client') {
-                    print('client');
                     return const ClientHome();
                   } else if (finalKey == 'coach') {
-                    print('coach');
                     return const CoachHome();
+                    // ignore: unnecessary_null_comparison
                   } else if (finalKey == null) {
                     return const WelcomeScreen();
                   }

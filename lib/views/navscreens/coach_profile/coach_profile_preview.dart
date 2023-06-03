@@ -1,6 +1,8 @@
 import 'package:coachingapp/views/navscreens/coach_profile/upload_video_by_coach.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../providers/get_user_type.dart';
 import '../../../utils/colors.dart';
 
 class CoachProfilePreview extends StatefulWidget {
@@ -33,18 +35,33 @@ class _CoachProfilePreviewState extends State<CoachProfilePreview> {
             children: [
               Text(
                 "Welcome",
-                style: TextStyle(color: AppColors().darKShadowColor, fontSize: 16),
+                style:
+                    TextStyle(color: AppColors().darKShadowColor, fontSize: 16),
               ),
-              Text(
-                "John Smith",
-                style: TextStyle(fontSize: 12, color: AppColors().darKShadowColor,),
+              Consumer(
+                builder: (context, ref, _) {
+                  final userResult = ref.read(userProvider);
+                  return userResult.when(
+                    data: (userModel) {
+                      return Text(
+                        userModel.firstName,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors().darKShadowColor,
+                        ),
+                      );
+                    },
+                    loading: () => Text("..."),
+                    error: (error, stackTrace) => Text('Error: $error'),
+                  );
+                },
               ),
             ],
           ),
           actions: [
             Padding(
-              padding: EdgeInsets.only(right: screenWidth*0.1),
-              child:  Icon(
+              padding: EdgeInsets.only(right: screenWidth * 0.1),
+              child: Icon(
                 Icons.notifications_none_outlined,
                 color: AppColors().darKShadowColor,
                 size: 28,
@@ -53,21 +70,33 @@ class _CoachProfilePreviewState extends State<CoachProfilePreview> {
           ],
         ),
         body: Padding(
-          padding: EdgeInsets.symmetric(vertical: screenWidth*0.04),
+          padding: EdgeInsets.symmetric(vertical: screenWidth * 0.04),
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
                 child: SizedBox(
-                  height: screenHeight*0.14,
+                  height: screenHeight * 0.14,
                   child: Column(
                     children: [
-                      const Text("Want to Upload Short Video?",style: TextStyle(color: Colors.black87,fontSize: 24,fontWeight: FontWeight.bold,),),
+                      const Text(
+                        "Want to Upload Short Video?",
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=> const UploadVideo()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const UploadVideo()));
                         },
                         child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: screenWidth*0.25,vertical: screenHeight*0.02),
+                          margin: EdgeInsets.symmetric(
+                              horizontal: screenWidth * 0.25,
+                              vertical: screenHeight * 0.02),
                           width: double.infinity,
                           height: screenHeight * 0.055,
                           alignment: Alignment.center,
@@ -78,8 +107,7 @@ class _CoachProfilePreviewState extends State<CoachProfilePreview> {
                           ),
                           child: const Text(
                             "Upload Videos",
-                            style: TextStyle(
-                                color: Colors.white, fontSize: 20),
+                            style: TextStyle(color: Colors.white, fontSize: 20),
                           ),
                         ),
                       ),
@@ -90,7 +118,8 @@ class _CoachProfilePreviewState extends State<CoachProfilePreview> {
               SliverGrid(
                 delegate: SliverChildBuilderDelegate((context, index) {
                   return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10),
                       child: Stack(
                         children: [
                           Container(
@@ -120,7 +149,8 @@ class _CoachProfilePreviewState extends State<CoachProfilePreview> {
                                 children: [
                                   CircleAvatar(
                                     radius: 30,
-                                    backgroundImage: AssetImage('assets/img.png'),
+                                    backgroundImage:
+                                        AssetImage('assets/img.png'),
                                   ),
                                   Text(
                                     'My Name',
@@ -134,8 +164,7 @@ class _CoachProfilePreviewState extends State<CoachProfilePreview> {
                             ),
                           ),
                         ],
-                      )
-                  );
+                      ));
                 }),
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: 300,

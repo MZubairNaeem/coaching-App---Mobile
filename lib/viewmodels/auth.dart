@@ -161,6 +161,14 @@ class Auth extends ChangeNotifier {
         'videoUrl': Videos.videoUrl,
         'videoThumbnail': Videos.videoThumbnail
       });
+      await FirebaseFirestore.instance
+          .collection('DemoVideos')
+          .doc(Videos.videoId)
+          .set({
+        'videoId': Videos.videoId,
+        'CoachId': _auth.currentUser!.uid,
+      });
+
       res = "Success";
     } catch (err) {
       res = err.toString();

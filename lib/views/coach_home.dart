@@ -7,6 +7,7 @@ import 'navscreens/chat/chatlist.dart';
 import 'navscreens/coach_profile/coach_profile_preview.dart';
 import 'navscreens/notification.dart';
 import 'navscreens/profile.dart';
+
 class CoachHome extends StatefulWidget {
   const CoachHome({Key? key}) : super(key: key);
 
@@ -36,16 +37,20 @@ class _CoachHomeState extends State<CoachHome> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors().primaryColor,
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=> const HomeCalender()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const HomeCalender()));
         },
-        child: const Icon(Icons.calendar_month_outlined,color: Colors.white,),
+        child: const Icon(
+          Icons.calendar_month_outlined,
+          color: Colors.white,
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         notchMargin: 5,
         child: SizedBox(
-          height:screenHeight * 0.07,
+          height: screenHeight * 0.07,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -67,7 +72,9 @@ class _CoachHomeState extends State<CoachHome> {
                         Icon(
                           Icons.feed,
                           size: 30,
-                          color: currentTab == 0 ? AppColors().primaryColor : Colors.grey,
+                          color: currentTab == 0
+                              ? AppColors().primaryColor
+                              : Colors.grey,
                         ),
                         // Text(
                         //   'Dashboard',
@@ -92,7 +99,9 @@ class _CoachHomeState extends State<CoachHome> {
                         Icon(
                           Icons.notifications,
                           size: 35,
-                          color: currentTab == 1 ? AppColors().primaryColor : Colors.grey,
+                          color: currentTab == 1
+                              ? AppColors().primaryColor
+                              : Colors.grey,
                         ),
                         // Text(
                         //   'Chat',
@@ -123,7 +132,9 @@ class _CoachHomeState extends State<CoachHome> {
                         Icon(
                           Icons.chat_bubble,
                           size: 35,
-                          color: currentTab == 2 ? AppColors().primaryColor : Colors.grey,
+                          color: currentTab == 2
+                              ? AppColors().primaryColor
+                              : Colors.grey,
                         ),
                         // Text(
                         //   'Profile',
@@ -137,7 +148,10 @@ class _CoachHomeState extends State<CoachHome> {
                   MaterialButton(
                     minWidth: 40,
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const Profile()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CoachProfile()));
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -145,7 +159,9 @@ class _CoachHomeState extends State<CoachHome> {
                         Icon(
                           Icons.person_sharp,
                           size: 35,
-                          color: currentTab == 3 ? AppColors().primaryColor : Colors.grey,
+                          color: currentTab == 3
+                              ? AppColors().primaryColor
+                              : Colors.grey,
                         ),
                         // Text(
                         //   'Settings',

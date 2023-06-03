@@ -60,89 +60,109 @@ class SubscribedCoaches extends StatelessWidget {
                 // Getting coaches List
                 final coaches = ref.watch(subscribed_coaches);
                 return coaches.when(
-                  data: (userModelList) {
-                    return CustomScrollView(
-                      slivers: [
-                        SliverPadding(
-                          padding: const EdgeInsets.all(10),
-                          sliver: SliverGrid(
-                            delegate: SliverChildBuilderDelegate(
-                              (context, index) {
-                                final userModel = userModelList[index];
-                                return GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => PublicProfile(
-                                                  userModel: userModel,
-                                                )));
-                                  },
-                                  child: Stack(
-                                    children: [
-                                      Container(
-                                        height: 200,
-                                        decoration: BoxDecoration(
-                                          image: const DecorationImage(
-                                            image: AssetImage('assets/img.png'),
-                                            fit: BoxFit.cover,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        bottom: 0,
-                                        left: 0,
-                                        right: 0,
-                                        child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            color:
-                                                Colors.black.withOpacity(0.5),
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                              bottomLeft: Radius.circular(10),
-                                              bottomRight: Radius.circular(10),
-                                            ),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              const CircleAvatar(
-                                                radius: 30,
-                                                backgroundImage: AssetImage(
-                                                    'assets/img.png'),
-                                              ),
-                                              Text(
-                                                userModel.firstName,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 20,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                              childCount: userModelList.length,
-                            ),
-                            gridDelegate:
-                                const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 300,
-                              crossAxisSpacing: 5,
-                              mainAxisSpacing: 5,
-                              childAspectRatio: 1,
+                  data: (userModelList) => userModelList.isEmpty
+                      ? Center(
+                          child: Text(
+                            'Please subscribe to a coach to see them here',
+                            style: TextStyle(
+                              color: AppColors().primaryColor,
+                              fontSize: 20,
                             ),
                           ),
+                        )
+                      : CustomScrollView(
+                          slivers: [
+                            SliverPadding(
+                              padding: const EdgeInsets.all(10),
+                              sliver: SliverGrid(
+                                delegate: SliverChildBuilderDelegate(
+                                  (context, index) {
+                                    final userModel = userModelList[index];
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PublicProfile(
+                                                      userModel: userModel,
+                                                    )));
+                                      },
+                                      child: Stack(
+                                        children: [
+                                          Container(
+                                            height: 200,
+                                            decoration: BoxDecoration(
+                                              image: const DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/img.png'),
+                                                fit: BoxFit.cover,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            bottom: 0,
+                                            left: 0,
+                                            right: 0,
+                                            child: Container(
+                                              padding: const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.black
+                                                    .withOpacity(0.5),
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10),
+                                                ),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  const CircleAvatar(
+                                                    radius: 30,
+                                                    backgroundImage: AssetImage(
+                                                        'assets/img.png'),
+                                                  ),
+                                                  Text(
+                                                    userModel.firstName,
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  childCount: userModelList.length,
+                                ),
+                                gridDelegate:
+                                    const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 300,
+                                  crossAxisSpacing: 5,
+                                  mainAxisSpacing: 5,
+                                  childAspectRatio: 1,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    );
-                  },
-                  error: (error, stackTrace) => Text('Error: $error'),
+                  error: (error, stackTrace) => Center(
+                    child: Text(
+                      'Error $error',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
                   loading: () => const Center(
                     child: CircularProgressIndicator(),
                   ),
