@@ -212,11 +212,12 @@ class _CoachProfileState extends State<CoachProfile> {
                                         await SharedPreferences.getInstance();
                                     sharedPreferences.remove('key');
                                     await FirebaseAuth.instance.signOut();
-                                    Navigator.push(
+                                    Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const ClientLogin()));
+                                                const ClientLogin()),
+                                        (route) => false);
                                   } catch (e) {
                                     print(e.toString());
                                   }
