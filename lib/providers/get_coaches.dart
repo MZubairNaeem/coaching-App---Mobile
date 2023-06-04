@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coachingapp/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,9 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final coachProvider = FutureProvider<List<UserModel>>((ref) async {
   String res = "Some error has occurred";
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  QuerySnapshot<Map<String, dynamic>> doc = await _firestore
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  QuerySnapshot<Map<String, dynamic>> doc = await firestore
       .collection('Users')
       .where('userType', isEqualTo: 'coachKey')
       .get();
@@ -23,6 +22,7 @@ final coachProvider = FutureProvider<List<UserModel>>((ref) async {
       phoneNumber: data['phoneNumber'],
       email: data['email'],
       userType: data['userType'],
+      // photoUrl: data['photoUrl'],
     );
   }).toList();
 

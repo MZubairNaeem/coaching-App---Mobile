@@ -1,5 +1,4 @@
 import 'package:coachingapp/providers/get_user_type.dart';
-import 'package:coachingapp/views/public_profile.dart';
 import 'package:coachingapp/views/subscribed_coaches.dart';
 import 'package:coachingapp/views/subscription/subscription.dart';
 import 'package:coachingapp/widgets/large_button_trasparent_text_left_align.dart';
@@ -11,8 +10,6 @@ import '../../../utils/colors.dart';
 import '../auth/login.dart';
 import 'coach_profile/coach_profile_preview.dart';
 import 'myaccount.dart';
-import '../../models/user.dart';
-import '../../viewmodels/auth.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);

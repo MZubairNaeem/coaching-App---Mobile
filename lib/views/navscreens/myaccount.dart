@@ -1,16 +1,16 @@
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coachingapp/widgets/snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../utils/colors.dart';
 import '../../../widgets/large_button_trasparent_text_left_align.dart';
-import '../../models/user.dart';
 import '../../providers/get_user_type.dart';
-import '../../viewmodels/auth.dart';
 import '../../viewmodels/storage_method.dart';
 import '../../widgets/image_picker.dart';
 import '../auth/forgetpass.dart';
@@ -49,7 +49,8 @@ class _ClientAccountState extends State<ClientAccount> {
         load = true;
       });
       String photoUrl = await StorageMethod()
-          .uploadImageToStorage('profilePic', image, false);
+          .uploadImageToStorage('profilePic', image);
+          
       setState(() {
         load = false;
       });
@@ -59,6 +60,15 @@ class _ClientAccountState extends State<ClientAccount> {
     }
   }
 
+// void uploadData() async {
+//   var user =  FirebaseAuth.instance.currentUser!;
+//   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+// final CollectionReference usersCollection = firestore.collection('Users');
+//   UploadTask task = FirebaseStorage.instance.ref('profilePic').child(user.uid).putData(_image!);
+//   TaskSnapshot snapshot = await task;
+//   String url = await snapshot.ref.getDownloadURL();
+//    usersCollection.doc(user.uid).update({'photoUrl': url});
+// }
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;

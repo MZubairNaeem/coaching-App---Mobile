@@ -51,7 +51,7 @@ class _CoachFindState extends State<CoachFind> {
                         ),
                       );
                     },
-                    loading: () => Text("..."),
+                    loading: () => const Text("..."),
                     error: (error, stackTrace) => Text('Error: $error'),
                   );
                 },

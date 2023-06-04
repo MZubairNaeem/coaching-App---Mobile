@@ -15,6 +15,7 @@ class CoachProfilePreview extends StatefulWidget {
 class _CoachProfilePreviewState extends State<CoachProfilePreview> {
   @override
   Widget build(BuildContext context) {
+    
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return GestureDetector(

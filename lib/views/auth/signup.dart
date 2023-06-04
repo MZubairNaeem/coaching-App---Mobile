@@ -56,6 +56,7 @@ class _ClientSignupState extends State<ClientSignup> {
         dateOfBirth: _dateOfBirthController.text,
         phoneNumber: _phoneNumberController.text,
         userType: widget.keyValue,
+        // photoUrl: "kSuQmCC"
       );
       if(res == 'Success'){
         Navigator.push(context, MaterialPageRoute(builder: (context)=>const ClientLogin()));
@@ -82,18 +83,6 @@ class _ClientSignupState extends State<ClientSignup> {
     });
   }
 
-  //
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   _emailController.dispose();
-  //   _passwordController.dispose();
-  //   _locationController.dispose();
-  //   _dateOfBirthController.dispose();
-  //   _passwordController.dispose();
-  //   _phoneNumberController.dispose();
-  //
-  // }
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;

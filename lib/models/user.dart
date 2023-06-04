@@ -36,9 +36,16 @@ class UserModel {
     required this.dateOfBirth,
     required this.phoneNumber,
     required this.userType,
-    // this.photoUrl
+    // required this.photoUrl
   });
-
+  UserModel.fromMap(Map<String, dynamic> map)
+      : uid = map['uid'],
+        firstName = map['firstName'],
+        email = map['email'],
+        location = map['location'],
+        dateOfBirth = map['dateOfBirth'],
+        phoneNumber = map['phoneNumber'],
+        userType = map['userType'];
   Map<String, dynamic> toJson() => {
         'uid': uid,
         'firstName': firstName,

@@ -14,26 +14,6 @@ class Auth extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  // Future<void> registerUser(UserModel user) async {
-
-  //   try {
-  //     UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-  //       email: user.email,
-  //       password: 'your_password_here',
-  //     );
-
-  //     await _firestore.collection('users').doc(userCredential.user!.uid).set({
-  //       'name': user.name,
-  //       'email': user.email,
-  //       'location': user.location,
-  //       'dateOfBirth': user.dateOfBirth,
-  //       'phoneNumber': user.phoneNumber,
-  //     });
-  //   } on FirebaseAuthException catch (e) {
-  //     _errorMessage = e.message;
-  //     notifyListeners();
-  //   }
-  // }
 
   Future<String> signUpUser({
     required String firstName,
@@ -43,6 +23,7 @@ class Auth extends ChangeNotifier {
     required String dateOfBirth,
     required String phoneNumber,
     required userType,
+    // required String photoUrl,
   }) async {
     String res = "Some error has occurred";
     try {
@@ -65,6 +46,7 @@ class Auth extends ChangeNotifier {
           phoneNumber: phoneNumber,
           email: email,
           userType: userType,
+          // photoUrl: photoUrl,
         );
         await _firestore.collection('Users').doc(cred.user!.uid).set(
               user.toJson(),
@@ -115,7 +97,9 @@ class Auth extends ChangeNotifier {
             dateOfBirth: data['dateOfBirth'],
             phoneNumber: data['phoneNumber'],
             email: data['email'],
-            userType: data['userType']);
+            userType: data['userType'],
+            // photoUrl: data['photoUrl']
+            );
       } else {
         res = "Please Enter all the fields";
       }
@@ -129,7 +113,9 @@ class Auth extends ChangeNotifier {
         dateOfBirth: "Empty",
         phoneNumber: "Empty",
         email: "Empty",
-        userType: "Empty");
+        userType: "Empty",
+        // photoUrl: "Empty"
+        );
   }
 
   Future forgetPass({required String email}) async {

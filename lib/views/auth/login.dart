@@ -6,7 +6,6 @@ import 'package:coachingapp/views/coach_home.dart';
 import 'package:coachingapp/widgets/large_button_blue.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../widgets/large_button_trasparent.dart';
@@ -25,7 +24,14 @@ class _ClientLoginState extends State<ClientLogin> {
   final _email = TextEditingController();
   final _pass = TextEditingController();
   bool _isLoading = false;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _database = FirebaseFirestore.instance;
+  Future<String?> _getUserType(String uid) async {
+    DocumentSnapshot snapshot =
+        await _database.collection('users').doc(uid).get();
 
+    return snapshot.get('userType');
+  }
 
   Future<void> _signinUser() async {
     setState(() {
@@ -37,6 +43,8 @@ class _ClientLoginState extends State<ClientLogin> {
           email: _email.text, password: _pass.text);
 
       dynamic res = Auth().getUserDetails(user.user!.uid);
+      var id = user.user!.uid;
+
       print(res);
       _key == 'coachKey'
           ? Navigator.pushReplacement(context,
