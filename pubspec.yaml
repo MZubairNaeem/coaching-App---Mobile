@@ -45,6 +45,7 @@ dependencies:
   chewie: ^1.0.0
   video_thumbnail: ^0.5.3
   image_cropper: ^4.0.1
+  path_provider: ^2.0.15
 
 flutter_native_splash:
   android: true

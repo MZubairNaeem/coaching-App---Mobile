@@ -1,14 +1,12 @@
-import 'dart:typed_data';
-
 import 'package:coachingapp/models/user.dart';
 import 'package:coachingapp/viewmodels/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 
+import '../models/videos.dart';
 import '../providers/get_demoVideos.dart';
 import '../utils/colors.dart';
-import '../widgets/videopreview.dart';
+import '../widgets/demo_video_player.dart';
 
 class PublicProfile extends StatefulWidget {
   final UserModel userModel;
@@ -27,19 +25,15 @@ class _PublicProfileState extends State<PublicProfile> {
 
   @override
   Widget build(BuildContext context) {
-    ScrollController _scrollController = ScrollController();
-
+    final demoVideosProvider = StreamProvider<List<Video>>(
+      (ref) => getVideosStream(widget.userModel.uid),
+    );
     final subscriptionProvider = FutureProvider<bool>((ref) async {
       final uid = widget.userModel.uid;
       final subscribed = await Auth().checkSubscription(uid);
       return subscribed;
     });
-    _scrollController.addListener(() {
-      if (_scrollController.position.atEdge &&
-          _scrollController.position.pixels != 0) {
-        print("object");
-      }
-    });
+
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -152,22 +146,13 @@ class _PublicProfileState extends State<PublicProfile> {
               ),
               Consumer(
                 builder: (context, ref, __) {
-                  final videos = ref.watch(demoVideos);
-                  final scrollController = ScrollController();
+                  final videos = ref.watch(demoVideosProvider);
 
-                  scrollController.addListener(() {
-                    if (scrollController.position.pixels ==
-                            scrollController.position.maxScrollExtent &&
-                        scrollController.position.outOfRange) {
-                      ref.refresh(demoVideos); // Trigger the refresh operation
-                    }
-                  });
+                  print(videos);
                   return videos.maybeWhen(
                     data: (videos) => Expanded(
                       child: GridView.builder(
                         itemCount: videos.length,
-                        controller: scrollController,
-                        physics: const BouncingScrollPhysics(),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 4,
@@ -176,8 +161,34 @@ class _PublicProfileState extends State<PublicProfile> {
                           crossAxisSpacing: 8.0,
                         ),
                         itemBuilder: (BuildContext context, int index) {
-                          return VideoPreview(
-                            VideoURL: videos[index].videoUrl!,
+                          return Container(
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                              color: Colors.grey[300],
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                    videos[index].videoThumbnail!,
+                                  ),
+                                  fit: BoxFit.cover),
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DemoVideoPlayer(
+                                      VideoURL: videos[index].videoUrl!,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Icon(
+                                Icons.play_arrow_rounded,
+                                color: AppColors().primaryColor,
+                                size: 40,
+                              ),
+                            ),
                           );
                         },
                       ),
@@ -185,8 +196,8 @@ class _PublicProfileState extends State<PublicProfile> {
                     loading: () => const Center(
                       child: CircularProgressIndicator(),
                     ),
-                    error: (error, stackTrace) => const Center(
-                      child: Text("Error"),
+                    error: (error, stackTrace) => Center(
+                      child: Text(error.toString()),
                     ),
                     orElse: () => const Center(
                       child: Text("No Videos"),

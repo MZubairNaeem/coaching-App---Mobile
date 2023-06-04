@@ -9,6 +9,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class UploadVideo extends StatefulWidget {
@@ -26,7 +28,14 @@ class _UploadVideoState extends State<UploadVideo> {
   Uint8List? thumbnail;
   bool _isLoading = false;
 
-  Future<List<File>> pickFiles() async {
+  Future<List<File>> pickFiles(BuildContext _context) async {
+    showDialog(
+        context: _context,
+        builder: (_context) => Center(
+              child: CircularProgressIndicator(
+                color: AppColors().primaryColor,
+              ),
+            ));
     List<File> videos = [];
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.video,
@@ -42,11 +51,18 @@ class _UploadVideoState extends State<UploadVideo> {
             imageFormat: ImageFormat.JPEG,
             quality: 100,
           );
-          videos.add(File(path));
+
+          File videoFile = File(path);
+          String videoId = DateTime.now().millisecondsSinceEpoch.toString();
+          File thumbnailFile =
+              await convertThumbnailToImage(thumbnail!, videoId);
+          String thumbnailUrl = await uploadThumbnail(thumbnailFile, videoId);
+
+          videos.add(videoFile);
         }
       }
     }
-
+    Navigator.pop(_context);
     return videos;
   }
 
@@ -61,20 +77,43 @@ class _UploadVideoState extends State<UploadVideo> {
       UploadTask uploadTask = storageRef.putFile(videoFile);
       await uploadTask;
       String downloadURL = await storageRef.getDownloadURL();
-      //String thumbnailPath = videoFile.path.replaceAll('.mp4', '.jpg');
-      //File thumbnail = await generateThumbnail(videoFile.path, thumbnailPath);
+
+      String videoId = DateTime.now().millisecondsSinceEpoch.toString();
+      File thumbnailFile = await convertThumbnailToImage(thumbnail!, videoId);
+      String thumbnailUrl = await uploadThumbnail(thumbnailFile, videoId);
+
       Video video = Video(
-          videoId: DateTime.now().millisecondsSinceEpoch.toString(),
-          videoTitle: title.text,
-          videoDescription: description.text,
-          videoUrl: downloadURL,
-          videoThumbnail: downloadURL);
+        videoId: videoId,
+        videoTitle: title.text,
+        videoDescription: description.text,
+        videoUrl: downloadURL,
+        videoThumbnail: thumbnailUrl,
+      );
 
       Auth().StoreVideos(video);
       downloadURLs.add(video);
     }
-
     return downloadURLs;
+  }
+
+  Future<File> convertThumbnailToImage(
+      Uint8List thumbnailData, String videoId) async {
+    Directory tempDir = await getTemporaryDirectory();
+    String tempPath = tempDir.path;
+    String imagePath = '$tempPath/$videoId.jpg';
+    File imageFile = File(imagePath);
+    await imageFile.writeAsBytes(thumbnailData);
+    return imageFile;
+  }
+
+  Future<String> uploadThumbnail(File thumbnailFile, String videoId) async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    String fileName = 'thumbnails/$videoId.jpg';
+    Reference storageRef = storage.ref().child(fileName);
+    UploadTask uploadTask = storageRef.putFile(thumbnailFile);
+    await uploadTask;
+    String downloadURL = await storageRef.getDownloadURL();
+    return downloadURL;
   }
 
   @override
@@ -166,7 +205,7 @@ class _UploadVideoState extends State<UploadVideo> {
                     hintStyle: TextStyle(color: AppColors().darKShadowColor),
                     suffixIcon: GestureDetector(
                       onTap: () async {
-                        List<File> videos = await pickFiles();
+                        List<File> videos = await pickFiles(context);
                         setState(() {
                           videosforupload = videos;
                         });
