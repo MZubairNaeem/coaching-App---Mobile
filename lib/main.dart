@@ -12,7 +12,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+import 'package:uuid/uuid.dart';
 import 'firebase_options.dart';
+var uuid = Uuid();
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();

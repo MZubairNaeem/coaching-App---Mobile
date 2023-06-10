@@ -2,15 +2,14 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coachingapp/models/chat_room_model.dart';
+import 'package:coachingapp/models/user.dart';
+import 'package:coachingapp/providers/firebase_helper.dart';
 import 'package:coachingapp/utils/colors.dart';
+import 'package:coachingapp/views/navscreens/chat/clientchat.dart';
 import 'package:coachingapp/views/navscreens/chat/search_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
-import '../../../models/user.dart';
-import '../../../providers/firebase_helper.dart';
-import 'clientchat.dart';
 
 class ChatList extends StatefulWidget {
   const ChatList({Key? key}) : super(key: key);
@@ -125,7 +124,7 @@ class _ChatListState extends State<ChatList> {
                             chatRoomSnapshot.docs[index].data()
                                 as Map<String, dynamic>);
                         Map<String, dynamic>? participant =
-                            chatRoomModel.participant;
+                            chatRoomModel.participant as Map<String, dynamic>?;
                         List<String> participantKeys =
                             participant!.keys.toList();
                         participantKeys.remove(userModel?.uid);
