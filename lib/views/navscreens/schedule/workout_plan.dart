@@ -1,16 +1,25 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:coachingapp/models/Schedule.dart';
 import 'package:coachingapp/utils/colors.dart';
+import 'package:coachingapp/viewmodels/scheduleViewModel.dart';
+import 'package:coachingapp/views/navscreens/schedule/newroutine.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../widgets/large_button_blue.dart';
-
+import '../../../widgets/snackbar.dart';
 
 class WorkOutPlan extends StatelessWidget {
   const WorkOutPlan({super.key});
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController _titleController = TextEditingController();
+    TextEditingController _descriptionController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppColors().whiteColor,
         leading: Icon(
           Icons.arrow_back,
           color: AppColors().blackColor.withOpacity(0.5),
@@ -23,67 +32,91 @@ class WorkOutPlan extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Title",
-                style: TextStyle(
-                    fontSize: 20,
-                    color: AppColors().blackColor.withOpacity(0.6))),
-            const SizedBox(
-              height: 10,
-            ),
-            TextField(
-              decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(
-                        width: 1,
-                        color: AppColors().lightShadowColor), //<-- SEE HERE
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(
-                        width: 1, color: AppColors().lightShadowColor),
-                  ),
-                  hintText: 'Add a title eg: Warm up',
-                  hintStyle: const TextStyle(color: Colors.grey)),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text("Description",
-                style: TextStyle(
-                    fontSize: 20,
-                    color: AppColors().blackColor.withOpacity(0.6))),
-            const SizedBox(
-              height: 10,
-            ),
-            TextField(
-              maxLines: 5,
-              keyboardType: TextInputType.multiline,
-              decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(
-                        width: 1,
-                        color: AppColors().lightShadowColor), //<-- SEE HERE
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(
-                        width: 1, color: AppColors().lightShadowColor),
-                  ),
-                  hintText: 'What training are you doing',
-                  hintStyle: const TextStyle(color: Colors.grey)),
-            ),
-            const SizedBox(
-              height: 70,
-            ),
-            const LargeButton(
-              name: "Save",
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Title",
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: AppColors().blackColor.withOpacity(0.6))),
+              const SizedBox(
+                height: 10,
+              ),
+              TextField(
+                controller: _titleController,
+                decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(
+                          width: 1,
+                          color: AppColors().lightShadowColor), //<-- SEE HERE
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(
+                          width: 1, color: AppColors().lightShadowColor),
+                    ),
+                    hintText: 'Add a title eg: Warm up',
+                    hintStyle: const TextStyle(color: Colors.grey)),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text("Description",
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: AppColors().blackColor.withOpacity(0.6))),
+              const SizedBox(
+                height: 10,
+              ),
+              TextField(
+                controller: _descriptionController,
+                maxLines: 5,
+                keyboardType: TextInputType.multiline,
+                decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(
+                          width: 1,
+                          color: AppColors().lightShadowColor), //<-- SEE HERE
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(
+                          width: 1, color: AppColors().lightShadowColor),
+                    ),
+                    hintText: 'What training are you doing',
+                    hintStyle: const TextStyle(color: Colors.grey)),
+              ),
+              const SizedBox(
+                height: 70,
+              ),
+              LargeButton(
+                name: "Save",
+                onPressed: () async {
+                  if (_titleController.value.text.isNotEmpty &&
+                      _descriptionController.value.text.isNotEmpty) {
+                    Schedule schedule = Schedule(
+                        id: FirebaseAuth.instance.currentUser!.uid,
+                        title: _titleController.text,
+                        description: _descriptionController.text);
+                    String result =
+                        await SchduleViewModel().AddSchedule(schedule);
+                    if (result == "Success") {
+                      showSnackBar(context, "Schedule Added Successfully");
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const NewRoutine()));
+                    } else {
+                      showSnackBar(context, "Schedule Added Failed");
+                    }
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

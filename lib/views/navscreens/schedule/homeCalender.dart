@@ -1,5 +1,6 @@
 import 'package:coachingapp/utils/colors.dart';
 import 'package:coachingapp/views/navscreens/schedule/newroutine.dart';
+import 'package:coachingapp/views/navscreens/schedule/workout_plan.dart';
 import 'package:flutter/material.dart';
 
 import '../../../widgets/calender_widget.dart';
@@ -22,7 +23,8 @@ class _HomeCalenderState extends State<HomeCalender> {
           ClipPath(
             clipper: CustomClipperPath(),
             child: Container(
-                padding: const EdgeInsets.only(top: 50.0, left: 15.0, right: 15.0),
+                padding:
+                    const EdgeInsets.only(top: 50.0, left: 15.0, right: 15.0),
                 decoration: BoxDecoration(
                   color: AppColors().primaryColor,
                 ),
@@ -61,11 +63,14 @@ class _HomeCalenderState extends State<HomeCalender> {
                   const SizedBox(
                     height: 40.0,
                   ),
-                   Padding(
+                  Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: LargeButton(
-                      onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const NewRoutine()));
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const NewRoutine()));
                       },
                       name: 'Scheduled Now',
                     ),

@@ -8,13 +8,12 @@ import 'login.dart';
 
 class ClientSignup extends StatefulWidget {
   final String keyValue;
-   const ClientSignup({Key? key, required this.keyValue}) : super(key: key);
+  const ClientSignup({Key? key, required this.keyValue}) : super(key: key);
   @override
   State<ClientSignup> createState() => _ClientSignupState();
 }
 
 class _ClientSignupState extends State<ClientSignup> {
-
   final _formKey = GlobalKey<FormState>();
   int testYear = 1980;
   int testMonth = 0;
@@ -40,6 +39,7 @@ class _ClientSignupState extends State<ClientSignup> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('userType', userType);
   }
+
   Future<void> _signupUser() async {
     if (!_formKey.currentState!.validate()) {
       return;
@@ -58,8 +58,9 @@ class _ClientSignupState extends State<ClientSignup> {
         userType: widget.keyValue,
         // photoUrl: "kSuQmCC"
       );
-      if(res == 'Success'){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>const ClientLogin()));
+      if (res == 'Success') {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const ClientLogin()));
       }
     } catch (error) {
       showDialog(
@@ -149,246 +150,288 @@ class _ClientSignupState extends State<ClientSignup> {
                       padding: EdgeInsets.all(screenHeight * 0.035),
                       child: Form(
                         key: _formKey,
-                        child:_isLoading
+                        child: _isLoading
                             ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                            :  Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                             widget.keyValue  == 'coachKey' ? 'Coach  Sign up' : 'Client Sign up',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors().primaryColor,
-                              ),
-                            ),
-                            Material(
-                              elevation: 3.0,
-                              shadowColor: AppColors().lightShadowColor,
-                              borderRadius: BorderRadius.circular(50.0),
-                              child: TextField(
-                                controller: _nameController,
-                                decoration: InputDecoration(
-                                    suffixIcon: Padding(
-                                      padding: const EdgeInsets.only(right: 10.0),
-                                      child: Icon(
-                                        Icons.person,
-                                        color: AppColors().darKShadowColor,
-                                      ),
+                                child: CircularProgressIndicator(),
+                              )
+                            : Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    widget.keyValue == 'coachKey'
+                                        ? 'Coach  Sign up'
+                                        : 'Client Sign up',
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors().primaryColor,
                                     ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: AppColors()
-                                              .lightShadowColor), //<-- SEE HERE
+                                  ),
+                                  Material(
+                                    elevation: 3.0,
+                                    shadowColor: AppColors().lightShadowColor,
+                                    borderRadius: BorderRadius.circular(50.0),
+                                    child: TextField(
+                                      controller: _nameController,
+                                      decoration: InputDecoration(
+                                          suffixIcon: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 10.0),
+                                            child: Icon(
+                                              Icons.person,
+                                              color:
+                                                  AppColors().darKShadowColor,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            borderSide: BorderSide(
+                                                width: 1,
+                                                color: AppColors()
+                                                    .lightShadowColor), //<-- SEE HERE
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            borderSide: BorderSide(
+                                                width: 1,
+                                                color: AppColors()
+                                                    .lightShadowColor),
+                                          ),
+                                          hintText: 'First name',
+                                          hintStyle: const TextStyle(
+                                              color: Colors.grey)),
                                     ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: AppColors().lightShadowColor),
+                                  ),
+                                  Material(
+                                    elevation: 3.0,
+                                    shadowColor: AppColors().lightShadowColor,
+                                    borderRadius: BorderRadius.circular(50.0),
+                                    child: TextField(
+                                      controller: _emailController,
+                                      decoration: InputDecoration(
+                                          suffixIcon: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 10.0),
+                                            child: Icon(
+                                              Icons.email,
+                                              color:
+                                                  AppColors().darKShadowColor,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            borderSide: BorderSide(
+                                                width: 1,
+                                                color: AppColors()
+                                                    .lightShadowColor), //<-- SEE HERE
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            borderSide: BorderSide(
+                                                width: 1,
+                                                color: AppColors()
+                                                    .lightShadowColor),
+                                          ),
+                                          hintText: 'Email',
+                                          hintStyle: const TextStyle(
+                                              color: Colors.grey)),
                                     ),
-                                    hintText: 'First name',
-                                    hintStyle: const TextStyle(color: Colors.grey)),
-                              ),
-                            ),
-                            Material(
-                              elevation: 3.0,
-                              shadowColor: AppColors().lightShadowColor,
-                              borderRadius: BorderRadius.circular(50.0),
-                              child: TextField(
-                                controller: _emailController,
-                                decoration: InputDecoration(
-                                    suffixIcon: Padding(
-                                      padding: const EdgeInsets.only(right: 10.0),
-                                      child: Icon(
-                                        Icons.email,
-                                        color: AppColors().darKShadowColor,
-                                      ),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: AppColors()
-                                              .lightShadowColor), //<-- SEE HERE
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: AppColors().lightShadowColor),
-                                    ),
-                                    hintText: 'Email',
-                                    hintStyle: const TextStyle(color: Colors.grey)),
-                              ),
-                            ),
-                            Material(
-                              elevation: 3.0,
-                              shadowColor: AppColors().lightShadowColor,
-                              borderRadius: BorderRadius.circular(50.0),
-                              child: TextField(
-                                controller: _dateOfBirthController,
-                                readOnly: true,
-                                onTap: () async {
-                                  var date = await showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: DateTime(1975),
-                                      lastDate: DateTime.now(),
-                                  );
-                                  setState(() {
-                                    if (date != null) {
-                                      var myYear = int.parse('${date.year}');
-                                      testYear = myYear;
+                                  ),
+                                  Material(
+                                    elevation: 3.0,
+                                    shadowColor: AppColors().lightShadowColor,
+                                    borderRadius: BorderRadius.circular(50.0),
+                                    child: TextField(
+                                      controller: _dateOfBirthController,
+                                      readOnly: true,
+                                      onTap: () async {
+                                        var date = await showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime(1975),
+                                          lastDate: DateTime.now(),
+                                        );
+                                        setState(() {
+                                          if (date != null) {
+                                            var myYear =
+                                                int.parse('${date.year}');
+                                            testYear = myYear;
 
-                                      var myMonth = int.parse('${date.month}');
-                                      testMonth = myMonth;
+                                            var myMonth =
+                                                int.parse('${date.month}');
+                                            testMonth = myMonth;
 
-                                      var myDay = int.parse('${date.day}');
-                                      testDay = myDay;
+                                            var myDay =
+                                                int.parse('${date.day}');
+                                            testDay = myDay;
 
-                                      _dateOfBirthController.text = "${date
-                                          .day}/${date.month}/${date.year}";
-                                    }
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                    suffixIcon: Padding(
-                                      padding: const EdgeInsets.only(right: 10.0),
-                                      child: Icon(
-                                        Icons.calendar_month,
-                                        color: AppColors().darKShadowColor,
-                                      ),
+                                            _dateOfBirthController.text =
+                                                "${date.day}/${date.month}/${date.year}";
+                                          }
+                                        });
+                                      },
+                                      decoration: InputDecoration(
+                                          suffixIcon: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 10.0),
+                                            child: Icon(
+                                              Icons.calendar_month,
+                                              color:
+                                                  AppColors().darKShadowColor,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            borderSide: BorderSide(
+                                                width: 1,
+                                                color: AppColors()
+                                                    .lightShadowColor), //<-- SEE HERE
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            borderSide: BorderSide(
+                                                width: 1,
+                                                color: AppColors()
+                                                    .lightShadowColor),
+                                          ),
+                                          hintText: 'Date of Birth',
+                                          hintStyle: const TextStyle(
+                                              color: Colors.grey)),
                                     ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: AppColors()
-                                              .lightShadowColor), //<-- SEE HERE
+                                  ),
+                                  Material(
+                                    elevation: 3.0,
+                                    shadowColor: AppColors().lightShadowColor,
+                                    borderRadius: BorderRadius.circular(50.0),
+                                    child: TextField(
+                                      controller: _locationController,
+                                      decoration: InputDecoration(
+                                          suffixIcon: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 10.0),
+                                            child: Icon(
+                                              Icons.location_on,
+                                              color:
+                                                  AppColors().darKShadowColor,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            borderSide: BorderSide(
+                                                width: 1,
+                                                color: AppColors()
+                                                    .lightShadowColor), //<-- SEE HERE
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            borderSide: BorderSide(
+                                                width: 1,
+                                                color: AppColors()
+                                                    .lightShadowColor),
+                                          ),
+                                          hintText: 'City',
+                                          hintStyle: const TextStyle(
+                                              color: Colors.grey)),
                                     ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: AppColors().lightShadowColor),
+                                  ),
+                                  Material(
+                                    elevation: 3.0,
+                                    shadowColor: AppColors().lightShadowColor,
+                                    borderRadius: BorderRadius.circular(50.0),
+                                    child: TextField(
+                                      controller: _phoneNumberController,
+                                      keyboardType: TextInputType.number,
+                                      decoration: InputDecoration(
+                                          suffixIcon: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 10.0),
+                                            child: Icon(
+                                              Icons.phone,
+                                              color:
+                                                  AppColors().darKShadowColor,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            borderSide: BorderSide(
+                                                width: 1,
+                                                color: AppColors()
+                                                    .lightShadowColor), //<-- SEE HERE
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            borderSide: BorderSide(
+                                                width: 1,
+                                                color: AppColors()
+                                                    .lightShadowColor),
+                                          ),
+                                          hintText: '(+62) 812 0101 0101',
+                                          hintStyle: const TextStyle(
+                                              color: Colors.grey)),
                                     ),
-                                    hintText: 'Date of Birth',
-                                    hintStyle: const TextStyle(color: Colors.grey)),
+                                  ),
+                                  Material(
+                                    elevation: 3.0,
+                                    shadowColor: AppColors().lightShadowColor,
+                                    borderRadius: BorderRadius.circular(50.0),
+                                    child: TextField(
+                                      controller: _passwordController,
+                                      obscureText: true,
+                                      decoration: InputDecoration(
+                                          suffixIcon: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 10.0),
+                                            child: Icon(
+                                              Icons.password,
+                                              color:
+                                                  AppColors().darKShadowColor,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            borderSide: BorderSide(
+                                                width: 1,
+                                                color: AppColors()
+                                                    .lightShadowColor), //<-- SEE HERE
+                                          ),
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            borderSide: BorderSide(
+                                                width: 1,
+                                                color: AppColors()
+                                                    .lightShadowColor),
+                                          ),
+                                          hintText: 'Password',
+                                          hintStyle: const TextStyle(
+                                              color: Colors.grey)),
+                                    ),
+                                  ),
+                                  Text(
+                                    "Agree term & condition",
+                                    style: TextStyle(
+                                        color: AppColors().darKShadowColor),
+                                  ),
+                                  LargeButton(
+                                    name: 'Sign Up',
+                                    onPressed: () async {
+                                      _signupUser();
+                                    },
+                                  ),
+                                ],
                               ),
-                            ),
-                            Material(
-                              elevation: 3.0,
-                              shadowColor: AppColors().lightShadowColor,
-                              borderRadius: BorderRadius.circular(50.0),
-                              child: TextField(
-                                controller: _locationController,
-                                decoration: InputDecoration(
-                                    suffixIcon: Padding(
-                                      padding: const EdgeInsets.only(right: 10.0),
-                                      child: Icon(
-                                        Icons.location_on,
-                                        color: AppColors().darKShadowColor,
-                                      ),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: AppColors()
-                                              .lightShadowColor), //<-- SEE HERE
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: AppColors().lightShadowColor),
-                                    ),
-                                    hintText: 'City',
-                                    hintStyle: const TextStyle(color: Colors.grey)),
-                              ),
-                            ),
-                            Material(
-                              elevation: 3.0,
-                              shadowColor: AppColors().lightShadowColor,
-                              borderRadius: BorderRadius.circular(50.0),
-                              child: TextField(
-                                controller: _phoneNumberController,
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                    suffixIcon: Padding(
-                                      padding: const EdgeInsets.only(right: 10.0),
-                                      child: Icon(
-                                        Icons.phone,
-                                        color: AppColors().darKShadowColor,
-                                      ),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: AppColors()
-                                              .lightShadowColor), //<-- SEE HERE
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: AppColors().lightShadowColor),
-                                    ),
-                                    hintText: '(+62) 812 0101 0101',
-                                    hintStyle: const TextStyle(color: Colors.grey)),
-                              ),
-                            ),
-                            Material(
-                              elevation: 3.0,
-                              shadowColor: AppColors().lightShadowColor,
-                              borderRadius: BorderRadius.circular(50.0),
-                              child: TextField(
-                                controller: _passwordController,
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                    suffixIcon: Padding(
-                                      padding: const EdgeInsets.only(right: 10.0),
-                                      child: Icon(
-                                        Icons.password,
-                                        color: AppColors().darKShadowColor,
-                                      ),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: AppColors()
-                                              .lightShadowColor), //<-- SEE HERE
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: AppColors().lightShadowColor),
-                                    ),
-                                    hintText: 'Password',
-                                    hintStyle: const TextStyle(color: Colors.grey)),
-                              ),
-                            ),
-                            Text(
-                              "Agree term & condition",
-                              style: TextStyle(color: AppColors().darKShadowColor),
-                            ),
-                            LargeButton(
-                              name: 'Sign Up',
-                              onPressed: () async {
-
-                                _signupUser();
-                              },
-                            ),
-                          ],
-                        ),
                       ),
                     ),
                   ),

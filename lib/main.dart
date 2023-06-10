@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uuid/uuid.dart';
 import 'firebase_options.dart';
+
 var uuid = Uuid();
 
 Future main() async {
