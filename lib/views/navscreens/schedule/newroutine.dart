@@ -1,5 +1,8 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:roundcheckbox/roundcheckbox.dart';
 
 import '../../../providers/get_all_client_schedule.dart';
 import '../../../providers/get_subscriber_clients.dart';
@@ -168,9 +171,7 @@ class _NewRoutineState extends State<NewRoutine> {
     );
   }
 
-  final checkedItemIdsProvider =
-      StateNotifierProvider<CheckedItemIdsNotifier, List<String>>(
-          (ref) => CheckedItemIdsNotifier());
+  final checkedItemIdsProvider = StateProvider<List<String>>((ref) => []);
 
   void showClients(BuildContext context) {
     showDialog(
@@ -184,21 +185,22 @@ class _NewRoutineState extends State<NewRoutine> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Padding(
-                  padding: EdgeInsets.all(16.0),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
                   child: Text(
                     'Select Clients',
                     style: TextStyle(
-                      fontSize: 20.0,
+                      fontSize: 28.0,
                       fontWeight: FontWeight.bold,
+                      fontFamily: 'Poppins',
+                      color: AppColors().primaryColor,
                     ),
                   ),
                 ),
                 Consumer(
                   builder: (context, ref, _) {
                     final clients = ref.watch(subscribed_clients);
-                    final checkedItemIds =
-                        ref.watch(checkedItemIdsProvider.notifier);
+                    final checkedItemIds = ref.watch(checkedItemIdsProvider);
 
                     return clients.when(
                       data: (data) {
@@ -211,7 +213,11 @@ class _NewRoutineState extends State<NewRoutine> {
                                   itemCount: data.length,
                                   itemBuilder: (context, index) {
                                     return Container(
-                                      margin: const EdgeInsets.all(5.0),
+                                      margin: const EdgeInsets.only(
+                                          left: 20.0, right: 20.0, top: 20.0),
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.1,
                                       decoration: BoxDecoration(
                                         borderRadius:
                                             BorderRadius.circular(50.0),
@@ -230,25 +236,37 @@ class _NewRoutineState extends State<NewRoutine> {
                                       ),
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                            MainAxisAlignment.spaceEvenly,
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                            CrossAxisAlignment.center,
                                         children: [
-                                          Checkbox(
-                                            value: checkedItemIds.state
-                                                .contains(data[index].uid),
-                                            onChanged: (value) {
-                                              checkedItemIds
-                                                  .toggleCheckedItemId(
-                                                      data[index].uid);
-                                            },
-                                          ),
-                                          const SizedBox(width: 10.0),
+                                          RoundCheckBox(
+                                              checkedColor:
+                                                  AppColors().primaryColor,
+                                              checkedWidget: const Icon(
+                                                Icons.check,
+                                                color: Colors.white,
+                                              ),
+                                              isChecked: checkedItemIds
+                                                  .contains(data[index].uid),
+                                              onTap: (onTap) {
+                                                if (onTap == true) {
+                                                  checkedItemIds
+                                                      .add(data[index].uid);
+                                                  print(checkedItemIds);
+                                                } else {
+                                                  checkedItemIds
+                                                      .remove(data[index].uid);
+                                                  print(checkedItemIds);
+                                                }
+                                              }),
                                           Text(
-                                            data[index].firstName,
+                                            data[index].firstName.toUpperCase(),
                                             style: TextStyle(
                                               color: AppColors().blackColor,
                                               fontSize: 22,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Montserrat',
                                             ),
                                           ),
                                         ],
@@ -265,16 +283,136 @@ class _NewRoutineState extends State<NewRoutine> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Consumer(
-                    builder: (context, ref, _) => ElevatedButton(
-                      onPressed: () {
-                        final selectedIds = ref.read(checkedItemIdsProvider);
-                        print(selectedIds);
-                        // Perform actions with selected clients
-                        //Navigator.pop(context); // Close the dialog
-                      },
-                      child: Text('Confirm'),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('Confirm'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void ShowVideos(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: AppColors().whiteColor.withOpacity(0.9),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Select Clients',
+                    style: TextStyle(
+                      fontSize: 28.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Poppins',
+                      color: AppColors().primaryColor,
                     ),
+                  ),
+                ),
+                Consumer(
+                  builder: (context, ref, _) {
+                    final clients = ref.watch(subscribed_clients);
+                    final checkedItemIds = ref.watch(checkedItemIdsProvider);
+
+                    return clients.when(
+                      data: (data) {
+                        return data.isEmpty
+                            ? const Center(
+                                child: Text('No Videos Found'),
+                              )
+                            : Expanded(
+                                child: ListView.builder(
+                                  itemCount: data.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      margin: const EdgeInsets.only(
+                                          left: 20.0, right: 20.0, top: 20.0),
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.1,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(50.0),
+                                        color: AppColors()
+                                            .whiteColor
+                                            .withOpacity(0.8),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: AppColors()
+                                                .blackColor
+                                                .withOpacity(0.1),
+                                            blurRadius: 10.0,
+                                            spreadRadius: 5.0,
+                                          ),
+                                        ],
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          RoundCheckBox(
+                                              checkedColor:
+                                                  AppColors().primaryColor,
+                                              checkedWidget: const Icon(
+                                                Icons.check,
+                                                color: Colors.white,
+                                              ),
+                                              isChecked: checkedItemIds
+                                                  .contains(data[index].uid),
+                                              onTap: (onTap) {
+                                                if (onTap == true) {
+                                                  checkedItemIds
+                                                      .add(data[index].uid);
+                                                  print(checkedItemIds);
+                                                } else {
+                                                  checkedItemIds
+                                                      .remove(data[index].uid);
+                                                  print(checkedItemIds);
+                                                }
+                                              }),
+                                          Text(
+                                            data[index].firstName.toUpperCase(),
+                                            style: TextStyle(
+                                              color: AppColors().blackColor,
+                                              fontSize: 22,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Montserrat',
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                      },
+                      loading: () => const CircularProgressIndicator(),
+                      error: (e, s) => Text(e.toString()),
+                    );
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('Confirm'),
                   ),
                 ),
               ],
