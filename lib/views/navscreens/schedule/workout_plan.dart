@@ -98,14 +98,16 @@ class WorkOutPlan extends StatelessWidget {
                   if (_titleController.value.text.isNotEmpty &&
                       _descriptionController.value.text.isNotEmpty) {
                     Schedule schedule = Schedule(
-                        id: FirebaseAuth.instance.currentUser!.uid,
+                        CoachId: FirebaseAuth.instance.currentUser!.uid,
+                        id: DateTime.now().millisecondsSinceEpoch.toString(),
                         title: _titleController.text,
                         description: _descriptionController.text);
                     String result =
                         await SchduleViewModel().AddSchedule(schedule);
                     if (result == "Success") {
                       showSnackBar(context, "Schedule Added Successfully");
-                      Navigator.push(
+                      //Navigate screen back and refresh and pop the current screen
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const NewRoutine()));

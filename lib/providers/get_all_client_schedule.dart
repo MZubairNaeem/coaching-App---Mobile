@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/Schedule.dart';
 import '../viewmodels/scheduleViewModel.dart';
 
-final scheduleProvider = FutureProvider<List<Schedule>>((ref) async {
+final scheduleProvider = StreamProvider<List<Schedule>>((ref) {
   try {
-    List<Schedule> schedules = await SchduleViewModel().getAllSchedules();
-    return schedules;
+    final stream = SchduleViewModel().getAllSchedules();
+    return stream;
   } catch (e) {
-    return [];
+    return Stream.value([]);
   }
 });

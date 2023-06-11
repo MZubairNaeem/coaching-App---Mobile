@@ -7,6 +7,7 @@ import 'navscreens/chat/chatlist.dart';
 import 'navscreens/coach_profile/coach_profile_preview.dart';
 import 'navscreens/notification.dart';
 import 'navscreens/profile.dart';
+import 'navscreens/schedule/newroutine.dart';
 
 class CoachHome extends StatefulWidget {
   const CoachHome({Key? key}) : super(key: key);
@@ -38,7 +39,7 @@ class _CoachHomeState extends State<CoachHome> {
         backgroundColor: AppColors().primaryColor,
         onPressed: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const HomeCalender()));
+              MaterialPageRoute(builder: (context) => const NewRoutine()));
         },
         child: const Icon(
           Icons.calendar_month_outlined,

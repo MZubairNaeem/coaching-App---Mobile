@@ -147,8 +147,6 @@ class _PublicProfileState extends State<PublicProfile> {
               Consumer(
                 builder: (context, ref, __) {
                   final videos = ref.watch(demoVideosProvider);
-
-                  print(videos);
                   return videos.maybeWhen(
                     data: (videos) => Expanded(
                       child: GridView.builder(
