@@ -23,7 +23,7 @@ class Auth extends ChangeNotifier {
     required String dateOfBirth,
     required String phoneNumber,
     required userType,
-    // required String photoUrl,
+    required String photoUrl,
   }) async {
     String res = "Some error has occurred";
     try {
@@ -46,7 +46,7 @@ class Auth extends ChangeNotifier {
           phoneNumber: phoneNumber,
           email: email,
           userType: userType,
-          // photoUrl: photoUrl,
+          photoUrl: photoUrl,
         );
         await _firestore.collection('Users').doc(cred.user!.uid).set(
               user.toJson(),
@@ -98,7 +98,7 @@ class Auth extends ChangeNotifier {
             phoneNumber: data['phoneNumber'],
             email: data['email'],
             userType: data['userType'],
-            // photoUrl: data['photoUrl']
+            photoUrl: data['photoUrl']
             );
       } else {
         res = "Please Enter all the fields";
@@ -114,7 +114,7 @@ class Auth extends ChangeNotifier {
         phoneNumber: "Empty",
         email: "Empty",
         userType: "Empty",
-        // photoUrl: "Empty"
+        photoUrl: "Empty"
         );
   }
 

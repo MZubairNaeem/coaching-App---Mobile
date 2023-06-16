@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coachingapp/main.dart';
 import 'package:coachingapp/models/message_model.dart';
 import 'package:coachingapp/models/user.dart';
+import 'package:coachingapp/providers/get_user_type.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
 import '../../../../utils/colors.dart';
@@ -75,10 +77,9 @@ class _ClientSideChatState extends State<ClientSideChat> {
           ),
           title: Row(
             children: [
-              const CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScuQGyYbgV9HFyiunO9mF6_lnB6MYwcx6t3w&usqp=CAU"),
-                // radius: screenWidth*0.0,
+              CircleAvatar(
+                radius: screenHeight * 0.025,
+                backgroundImage: NetworkImage(widget.targetUser.photoUrl),
               ),
               SizedBox(
                 width: screenWidth * 0.04,

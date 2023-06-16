@@ -22,7 +22,7 @@ final coachProvider = FutureProvider<List<UserModel>>((ref) async {
       phoneNumber: data['phoneNumber'],
       email: data['email'],
       userType: data['userType'],
-      // photoUrl: data['photoUrl'],
+      photoUrl: data['photoUrl'],
     );
   }).toList();
 

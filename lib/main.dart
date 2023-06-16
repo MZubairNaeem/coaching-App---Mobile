@@ -23,7 +23,7 @@ Future main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(const MyApp());
   await Future.delayed(const Duration(seconds: 2));
   FlutterNativeSplash.remove();
 }
@@ -36,6 +36,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final providerContainer = ProviderContainer();
   String finalKey = '';
   @override
   void initState() {
@@ -58,40 +59,48 @@ class _MyAppState extends State<MyApp> {
     return Sizer(
       // ignore: non_constant_identifier_names
       builder: (context, Orientation, DeviceType) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: StreamBuilder(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.active) {
-                if (snapshot.hasData) {
-                  if (finalKey == 'client') {
-                    return const ClientHome();
-                  } else if (finalKey == 'coach') {
-                    return const CoachHome();
-                    // ignore: unnecessary_null_comparison
-                  } else if (finalKey == null) {
-                    return const WelcomeScreen();
+        return ProviderScope(
+          parent: providerContainer,
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: StreamBuilder(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.active) {
+                  if (snapshot.hasData) {
+                    if (finalKey == 'client') {
+                      return const ClientHome();
+                    } else if (finalKey == 'coach') {
+                      return const CoachHome();
+                      // ignore: unnecessary_null_comparison
+                    } else if (finalKey == null) {
+                      return const WelcomeScreen();
+                    }
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text('${snapshot.hasError}'),
+                    );
                   }
-                } else if (snapshot.hasError) {
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
-                    child: Text('${snapshot.hasError}'),
+                    child: CircularProgressIndicator(
+                      color: AppColors().primaryColor,
+                    ),
                   );
                 }
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors().primaryColor,
-                  ),
-                );
-              }
-              return const WelcomeScreen();
-            },
+                return const WelcomeScreen();
+              },
+            ),
           ),
         );
       },
     );
+  }
+   @override
+  void dispose() {
+    providerContainer.dispose(); // Dispose the container when the app is closed
+    super.dispose();
   }
 }
 
@@ -156,7 +165,7 @@ class WelcomeScreen extends StatelessWidget {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const ClientLogin()));
+                                    builder: (context) => const Login()));
                           },
                         )
                       ],

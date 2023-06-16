@@ -23,11 +23,22 @@ class _CoachFindState extends State<CoachFind> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.transparent,
-          leading: const Padding(
-            padding: EdgeInsets.only(left: 25.0),
-            child: CircleAvatar(
-              // radius: 5,
-              backgroundImage: AssetImage('assets/img.png'),
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 25.0),
+            child: Consumer(
+              builder: (context, ref, _) {
+                final userResult = ref.read(userProvider);
+                return userResult.when(
+                  data: (userModel) {
+                    return CircleAvatar(
+                      radius: 20,
+                      backgroundImage: NetworkImage(userModel.photoUrl),
+                    );
+                  },
+                  loading: () => const Text("..."),
+                  error: (error, stackTrace) => Text('Error: $error'),
+                );
+              },
             ),
           ),
           title: Column(

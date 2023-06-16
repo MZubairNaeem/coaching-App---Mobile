@@ -14,6 +14,7 @@ class ClientSignup extends StatefulWidget {
 }
 
 class _ClientSignupState extends State<ClientSignup> {
+  bool _obscurePassword = true;
   final _formKey = GlobalKey<FormState>();
   int testYear = 1980;
   int testMonth = 0;
@@ -56,11 +57,11 @@ class _ClientSignupState extends State<ClientSignup> {
         dateOfBirth: _dateOfBirthController.text,
         phoneNumber: _phoneNumberController.text,
         userType: widget.keyValue,
-        // photoUrl: "kSuQmCC"
+        photoUrl: "https://funylife.in/wp-content/uploads/2023/04/58_Cute-Girl-Pic-WWW.FUNYLIFE.IN_-1-1024x1024.jpg"
       );
       if (res == 'Success') {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const ClientLogin()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const Login()));
       }
     } catch (error) {
       showDialog(
@@ -387,15 +388,25 @@ class _ClientSignupState extends State<ClientSignup> {
                                     borderRadius: BorderRadius.circular(50.0),
                                     child: TextField(
                                       controller: _passwordController,
-                                      obscureText: true,
+                                      obscureText: _obscurePassword,
                                       decoration: InputDecoration(
                                           suffixIcon: Padding(
                                             padding: const EdgeInsets.only(
                                                 right: 10.0),
-                                            child: Icon(
-                                              Icons.password,
-                                              color:
-                                                  AppColors().darKShadowColor,
+                                            child: IconButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  _obscurePassword =
+                                                      !_obscurePassword;
+                                                });
+                                              },
+                                              icon: Icon(
+                                                _obscurePassword
+                                                    ? Icons.visibility
+                                                    : Icons.visibility_off,
+                                                color:
+                                                    AppColors().darKShadowColor,
+                                              ),
                                             ),
                                           ),
                                           enabledBorder: OutlineInputBorder(

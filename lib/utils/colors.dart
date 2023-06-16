@@ -10,6 +10,7 @@ class AppColors{
   var accentColor = const Color(0xffc73866);
   var receiverColor = const Color(0x000000ff);
   var senderColor = const Color(0xffe6e9f5);
+  var redColor =  Colors.red;
 }
 
 const primaryColor = Color(0xff0f52ba);

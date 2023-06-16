@@ -40,12 +40,12 @@ class _ProfileState extends State<Profile> {
                       color: AppColors().primaryColor,
                       borderRadius: const BorderRadius.only(
                           bottomRight: Radius.circular(50))),
-                  child: const Padding(
+                  child: Padding(
                     padding: EdgeInsets.only(bottom: 8.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
+                        const Text(
                           'Profile',
                           style: TextStyle(
                               fontSize: 28,
@@ -55,25 +55,22 @@ class _ProfileState extends State<Profile> {
                         Align(
                           alignment: Alignment.topCenter,
                           child: SizedBox(
-                            child: CircleAvatar(
-                              radius: 50.0,
-                              backgroundColor: Colors.white,
-                              child: CircleAvatar(
-                                radius: 47.0,
-                                backgroundImage: AssetImage('assets/img.png'),
-                                // child: Align(
-                                //   alignment: Alignment.bottomRight,
-                                //   child: CircleAvatar(
-                                //     backgroundColor: Colors.white,
-                                //     radius: 12.0,
-                                //     child: Icon(
-                                //       Icons.camera_alt,
-                                //       size: 15.0,
-                                //       color: AppColors().darKShadowColor,
-                                //     ),
-                                //   ),
-                                // ),
-                              ),
+                            child: Consumer(
+                              builder: (context, ref, _) {
+                                final userResult = ref.read(userProvider);
+                                return userResult.when(
+                                  data: (userModel) {
+                                    return CircleAvatar(
+                                      radius: screenHeight*0.06,
+                                      backgroundImage:
+                                          NetworkImage(userModel.photoUrl),
+                                    );
+                                  },
+                                  loading: () => const Text("..."),
+                                  error: (error, stackTrace) =>
+                                      Text('Error: $error'),
+                                );
+                              },
                             ),
                           ),
                         ),
@@ -212,7 +209,7 @@ class _ProfileState extends State<Profile> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const ClientLogin()),
+                                                const Login()),
                                         (route) => false);
                                   } catch (e) {
                                     print(e.toString());

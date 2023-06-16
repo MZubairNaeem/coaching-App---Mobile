@@ -23,7 +23,6 @@ class ClientAccount extends StatefulWidget {
 }
 
 class _ClientAccountState extends State<ClientAccount> {
-  
   Uint8List? _image;
   bool load = false;
   void SelectImage() async {
@@ -48,9 +47,13 @@ class _ClientAccountState extends State<ClientAccount> {
       setState(() {
         load = true;
       });
-      String photoUrl = await StorageMethod()
-          .uploadImageToStorage('profilePic', image);
-          
+      String photoUrl =
+          await StorageMethod().uploadImageToStorage('profilePic', image);
+      FirebaseFirestore.instance
+          .collection("Users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({'photoUrl': photoUrl});
+      print(photoUrl);
       setState(() {
         load = false;
       });
@@ -106,33 +109,30 @@ class _ClientAccountState extends State<ClientAccount> {
                           alignment: Alignment.topCenter,
                           child: SizedBox(
                             child: CircleAvatar(
-                              radius: 50.0,
+                              radius: screenHeight * 0.053,
                               backgroundColor: Colors.white,
                               child: _image != null
                                   ? CircleAvatar(
-                                      radius: 50,
+                                      radius: screenHeight * 0.05,
                                       backgroundImage: MemoryImage(_image!),
                                     )
-                                  : CircleAvatar(
-                                      radius: 47.0,
-                                      backgroundImage:
-                                          const AssetImage('assets/img.png'),
-                                      child: Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: CircleAvatar(
-                                          backgroundColor: Colors.white,
-                                          radius: 15.0,
-                                          child: GestureDetector(
-                                            // onTap: ,
-                                            child: Icon(
-                                              Icons.camera_alt,
-                                              size: 18.0,
-                                              color:
-                                                  AppColors().darKShadowColor,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                  : Consumer(
+                                      builder: (context, ref, _) {
+                                        final userResult =
+                                            ref.read(userProvider);
+                                        return userResult.when(
+                                          data: (userModel) {
+                                            return CircleAvatar(
+                                              radius: screenHeight * 0.05,
+                                              backgroundImage: NetworkImage(
+                                                  userModel.photoUrl),
+                                            );
+                                          },
+                                          loading: () => const Text("..."),
+                                          error: (error, stackTrace) =>
+                                              Text('Error: $error'),
+                                        );
+                                      },
                                     ),
                             ),
                           ),
@@ -173,230 +173,225 @@ class _ClientAccountState extends State<ClientAccount> {
             Align(
               alignment: Alignment.bottomCenter,
               child: Stack(
-                      children: [
-                        Container(
-                          height: MediaQuery.of(context).size.height / 1.38,
-                          width: double.infinity,
-                          decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(50))),
-                          child: Padding(
-                            padding: EdgeInsets.all(screenHeight * 0.035),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Consumer(
-                                  builder: (context, ref, _) {
-                                    final userResult = ref.read(userProvider);
-                                    return userResult.when(
-                                      data: (userModel) {
-                                        return Column(
-                                          children: [
-                                            Text(
-                                              userModel.email,
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color:
-                                                    AppColors().darKShadowColor,
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                      loading: () => CircularProgressIndicator(
-                                        color: AppColors().primaryColor,
-                                        strokeWidth: 2,
-                                      ),
-                                      error: (error, stackTrace) =>
-                                          Text('Error: $error'),
-                                    );
-                                  },
-                                ),
-                                Container(
-                                  height: screenHeight * 0.3,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 1,
-                                        blurRadius: 4,
-                                        offset: const Offset(
-                                            0, 1), // changes position of shadow
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height / 1.38,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius:
+                            BorderRadius.only(topLeft: Radius.circular(50))),
+                    child: Padding(
+                      padding: EdgeInsets.all(screenHeight * 0.035),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Consumer(
+                            builder: (context, ref, _) {
+                              final userResult = ref.read(userProvider);
+                              return userResult.when(
+                                data: (userModel) {
+                                  return Column(
+                                    children: [
+                                      Text(
+                                        userModel.email,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: AppColors().darKShadowColor,
+                                        ),
                                       ),
                                     ],
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(25)),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(28.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text("First name"),
-                                            Consumer(
-                                              builder: (context, ref, _) {
-                                                final userResult =
-                                                    ref.read(userProvider);
-
-                                                return userResult.when(
-                                                  data: (userModel) {
-                                                    return Column(
-                                                      children: [
-                                                        Text(userModel.firstName),
-                                                      ],
-                                                    );
-                                                  },
-                                                  loading: () =>
-                                                      CircularProgressIndicator(
-                                                    color: AppColors()
-                                                        .primaryColor,
-                                                    strokeWidth: 2,
-                                                  ),
-                                                  error: (error, stackTrace) =>
-                                                      Text('Error: $error'),
-                                                );
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                        Expanded(
-                                          child: Divider(
-                                            color: AppColors().lightShadowColor,
-                                          ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text("Phone number"),
-                                            Consumer(
-                                              builder: (context, ref, _) {
-                                                final userResult =
-                                                    ref.read(userProvider);
-
-                                                return userResult.when(
-                                                  data: (userModel) {
-                                                    return Text(
-                                                        userModel.phoneNumber);
-                                                  },
-                                                  loading: () =>
-                                                      CircularProgressIndicator(
-                                                    color: AppColors()
-                                                        .primaryColor,
-                                                    strokeWidth: 2,
-                                                  ),
-                                                  error: (error, stackTrace) =>
-                                                      Text('Error: $error'),
-                                                );
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                        Expanded(
-                                          child: Divider(
-                                            color: AppColors().lightShadowColor,
-                                          ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text("Date of birth"),
-                                            Consumer(
-                                              builder: (context, ref, _) {
-                                                final userResult =
-                                                    ref.read(userProvider);
-
-                                                return userResult.when(
-                                                  data: (userModel) {
-                                                    return Text(userModel.dateOfBirth);
-                                                  },
-                                                  loading: () =>
-                                                      CircularProgressIndicator(
-                                                    color: AppColors()
-                                                        .primaryColor,
-                                                    strokeWidth: 2,
-                                                  ),
-                                                  error: (error, stackTrace) =>
-                                                      Text('Error: $error'),
-                                                );
-                                              },
-                                            ),
-                                            
-                                          ],
-                                        ),
-                                        Expanded(
-                                          child: Divider(
-                                            color: AppColors().lightShadowColor,
-                                          ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text("Location"),
-                                            Consumer(
-                                              builder: (context, ref, _) {
-                                                final userResult =
-                                                    ref.read(userProvider);
-
-                                                return userResult.when(
-                                                  data: (userModel) {
-                                                    return Text(userModel.location);
-                                                  },
-                                                  loading: () =>
-                                                      CircularProgressIndicator(
-                                                    color: AppColors()
-                                                        .primaryColor,
-                                                    strokeWidth: 2,
-                                                  ),
-                                                  error: (error, stackTrace) =>
-                                                      Text('Error: $error'),
-                                                );
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                        Expanded(
-                                          child: Divider(
-                                            color: AppColors().lightShadowColor,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  );
+                                },
+                                loading: () => CircularProgressIndicator(
+                                  color: AppColors().primaryColor,
+                                  strokeWidth: 2,
                                 ),
-                                SizedBox(
-                                  height: screenHeight * 0.005,
-                                ),
-                                LargeButtonTransparentLeftAlignText(
-                                  name: "Change Password",
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const ForgetPass()));
-                                  },
-                                ),
-                                LargeButtonTransparentLeftAlignText(
-                                  name: "Settings",
-                                  onPressed: () {},
+                                error: (error, stackTrace) =>
+                                    Text('Error: $error'),
+                              );
+                            },
+                          ),
+                          Container(
+                            height: screenHeight * 0.3,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 1,
+                                  blurRadius: 4,
+                                  offset: const Offset(
+                                      0, 1), // changes position of shadow
                                 ),
                               ],
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(25)),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(28.0),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text("First name"),
+                                      Consumer(
+                                        builder: (context, ref, _) {
+                                          final userResult =
+                                              ref.read(userProvider);
+
+                                          return userResult.when(
+                                            data: (userModel) {
+                                              return Column(
+                                                children: [
+                                                  Text(userModel.firstName),
+                                                ],
+                                              );
+                                            },
+                                            loading: () =>
+                                                CircularProgressIndicator(
+                                              color: AppColors().primaryColor,
+                                              strokeWidth: 2,
+                                            ),
+                                            error: (error, stackTrace) =>
+                                                Text('Error: $error'),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  Expanded(
+                                    child: Divider(
+                                      color: AppColors().lightShadowColor,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text("Phone number"),
+                                      Consumer(
+                                        builder: (context, ref, _) {
+                                          final userResult =
+                                              ref.read(userProvider);
+
+                                          return userResult.when(
+                                            data: (userModel) {
+                                              return Text(
+                                                  userModel.phoneNumber);
+                                            },
+                                            loading: () =>
+                                                CircularProgressIndicator(
+                                              color: AppColors().primaryColor,
+                                              strokeWidth: 2,
+                                            ),
+                                            error: (error, stackTrace) =>
+                                                Text('Error: $error'),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  Expanded(
+                                    child: Divider(
+                                      color: AppColors().lightShadowColor,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text("Date of birth"),
+                                      Consumer(
+                                        builder: (context, ref, _) {
+                                          final userResult =
+                                              ref.read(userProvider);
+
+                                          return userResult.when(
+                                            data: (userModel) {
+                                              return Text(
+                                                  userModel.dateOfBirth);
+                                            },
+                                            loading: () =>
+                                                CircularProgressIndicator(
+                                              color: AppColors().primaryColor,
+                                              strokeWidth: 2,
+                                            ),
+                                            error: (error, stackTrace) =>
+                                                Text('Error: $error'),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  Expanded(
+                                    child: Divider(
+                                      color: AppColors().lightShadowColor,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text("Location"),
+                                      Consumer(
+                                        builder: (context, ref, _) {
+                                          final userResult =
+                                              ref.read(userProvider);
+
+                                          return userResult.when(
+                                            data: (userModel) {
+                                              return Text(userModel.location);
+                                            },
+                                            loading: () =>
+                                                CircularProgressIndicator(
+                                              color: AppColors().primaryColor,
+                                              strokeWidth: 2,
+                                            ),
+                                            error: (error, stackTrace) =>
+                                                Text('Error: $error'),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  Expanded(
+                                    child: Divider(
+                                      color: AppColors().lightShadowColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                          SizedBox(
+                            height: screenHeight * 0.005,
+                          ),
+                          LargeButtonTransparentLeftAlignText(
+                            name: "Change Password",
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ForgetPass()));
+                            },
+                          ),
+                          LargeButtonTransparentLeftAlignText(
+                            name: "Settings",
+                            onPressed: () {},
+                          ),
+                        ],
+                      ),
                     ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

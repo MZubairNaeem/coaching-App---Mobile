@@ -168,8 +168,8 @@ class _ChatListState extends State<ChatList> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             CircleAvatar(
-                                              backgroundImage: const NetworkImage(
-                                                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScuQGyYbgV9HFyiunO9mF6_lnB6MYwcx6t3w&usqp=CAU"),
+                                              backgroundImage:  NetworkImage(
+                                                  targetUser!.photoUrl),
                                               radius: size.width * 0.08,
                                             ),
                                             SizedBox(
@@ -180,7 +180,7 @@ class _ChatListState extends State<ChatList> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  targetUser!.firstName,
+                                                  targetUser.firstName,
                                                   style: const TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 18.0,

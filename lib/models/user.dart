@@ -24,7 +24,7 @@ class UserModel {
   String email;
   String location;
   String dateOfBirth;
-  // String photoUrl;
+  String photoUrl;
   String phoneNumber;
   String userType;
 
@@ -36,7 +36,7 @@ class UserModel {
     required this.dateOfBirth,
     required this.phoneNumber,
     required this.userType,
-    // required this.photoUrl
+    required this.photoUrl
   });
   UserModel.fromMap(Map<String, dynamic> map)
       : uid = map['uid'],
@@ -45,7 +45,9 @@ class UserModel {
         location = map['location'],
         dateOfBirth = map['dateOfBirth'],
         phoneNumber = map['phoneNumber'],
+        photoUrl = map['photoUrl'],
         userType = map['userType'];
+
   Map<String, dynamic> toJson() => {
         'uid': uid,
         'firstName': firstName,
@@ -54,7 +56,7 @@ class UserModel {
         'dateOfBirth': dateOfBirth,
         'phoneNumber': phoneNumber,
         'userType': userType,
-        // 'photoUrl': photoUrl
+        'photoUrl': photoUrl
       };
 
   static UserModel fromSnap(DocumentSnapshot snap) {
@@ -67,7 +69,7 @@ class UserModel {
       dateOfBirth: snapshot['dateOfBirth'],
       phoneNumber: snapshot['phoneNumber'],
       userType: snapshot['userType'],
-      // photoUrl: snapshot['photoUrl'],
+      photoUrl: snapshot['photoUrl'],
     );
   }
 }
