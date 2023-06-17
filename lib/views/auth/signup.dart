@@ -62,7 +62,7 @@ class _ClientSignupState extends State<ClientSignup> {
       if (res == 'Success') {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => const Login()));
-        showSnackBar(context, "Account Created Successfully");
+        showSnackBar(context, "Please check email to verify your email");
       }
     } catch (error) {
       showSnackBar(context, error.toString());

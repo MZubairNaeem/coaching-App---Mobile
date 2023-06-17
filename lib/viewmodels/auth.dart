@@ -14,7 +14,6 @@ class Auth extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-
   Future<String> signUpUser({
     required String firstName,
     required String email,
@@ -31,7 +30,9 @@ class Auth extends ChangeNotifier {
         //register user
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
-
+        User? userr = cred.user;
+        // Send verification email to the user
+        await userr?.sendEmailVerification();
         model.UserModel user = model.UserModel(
           uid: cred.user!.uid,
           firstName: firstName,
@@ -92,8 +93,7 @@ class Auth extends ChangeNotifier {
             phoneNumber: data['phoneNumber'],
             email: data['email'],
             userType: data['userType'],
-            photoUrl: data['photoUrl']
-            );
+            photoUrl: data['photoUrl']);
       } else {
         res = "Please Enter all the fields";
       }
@@ -108,8 +108,7 @@ class Auth extends ChangeNotifier {
         phoneNumber: "Empty",
         email: "Empty",
         userType: "Empty",
-        photoUrl: "Empty"
-        );
+        photoUrl: "Empty");
   }
 
   Future forgetPass({required String email}) async {

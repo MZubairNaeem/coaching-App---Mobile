@@ -1,3 +1,4 @@
+import 'package:coachingapp/widgets/subscription_add_dialogue.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/colors.dart';
@@ -49,6 +50,17 @@ class _PlanDescriptionState extends State<PlanDescription> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {  showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return SubscriptionDialog();
+            },
+          );},
+        icon: Icon(Icons.add),
+        backgroundColor: AppColors().primaryColor,
+        label: Text("Add Plan"),
       ),
     );
   }

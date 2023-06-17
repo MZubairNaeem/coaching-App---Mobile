@@ -1,6 +1,5 @@
 import 'package:coachingapp/providers/get_user_type.dart';
 import 'package:coachingapp/views/subscribed_coaches.dart';
-import 'package:coachingapp/views/subscription/subscription.dart';
 import 'package:coachingapp/widgets/large_button_trasparent_text_left_align.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +18,9 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  //  final FirebaseAuth _auth = FirebaseAuth.instance;
+  // User? userr = _auth.currentUser;
+  User? user =  FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -45,8 +47,8 @@ class _ProfileState extends State<Profile> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        const Text(
-                          'Profile',
+                         Text(
+                          user!.emailVerified.toString(),
                           style: TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.bold,

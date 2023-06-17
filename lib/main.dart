@@ -40,10 +40,18 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final providerContainer = ProviderContainer();
   String? finalKey;
+  bool? isVerified;
   @override
   void initState() {
     super.initState();
     getValidationKey();
+    if (FirebaseAuth.instance.currentUser?.emailVerified == true) {
+      print("false");
+      setState(() {
+        isVerified = true;
+      });
+    }
+    print(isVerified);
     print(finalKey);
   }
 
@@ -80,10 +88,9 @@ class _MyAppState extends State<MyApp> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.active) {
                   if (snapshot.hasData) {
-                    if (finalKey == 'client') {
-                      return const ClientHome(
-                      );
-                    } else if (finalKey == 'coach') {
+                    if (finalKey == 'client' && isVerified == true) {
+                      return const ClientHome();
+                    } else if (finalKey == 'coach' && isVerified == true) {
                       return const CoachHome();
                       // ignore: unnecessary_null_comparison
                     } else if (finalKey == null) {

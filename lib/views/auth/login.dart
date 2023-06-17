@@ -52,28 +52,42 @@ class _LoginState extends State<Login> {
     setState(() {
       _isLoading = true;
     });
+
     try {
       final FirebaseAuth auth = FirebaseAuth.instance;
       UserCredential user = await auth.signInWithEmailAndPassword(
           email: _email.text, password: _pass.text);
-      UserModel userData =
-          await FirebaseHelper.getUserModelById(user.user!.uid);
-      print(userData.userType);
-      if (userData.userType == 'coachKey' && _key == 'coachKey') {
+      User? userr = auth.currentUser;
+
+      print(userr!.emailVerified);
+      if (userr.emailVerified) {
+        UserModel userData =
+            await FirebaseHelper.getUserModelById(user.user!.uid);
+        print(userData.userType);
+        if (userData.userType == 'coachKey' && _key == 'coachKey') {
+          // ignore: use_build_context_synchronously
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const CoachHome()));
+        } else if (userData.userType == 'clientKey' && _key == 'clientKey') {
+          // ignore: use_build_context_synchronously
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const ClientHome()));
+        } else if (userData.userType == "adminKey" && _key == "adminKey") {
+          // ignore: use_build_context_synchronously
+          showSnackBar(context, "You are not registered as a coach or client");
+        } else {
+          // ignore: use_build_context_synchronously
+          showSnackBar(context, "Some Error has occured");
+        }
+      } else if (!userr.emailVerified) {
+        // await userr.sendEmailVerification();
         // ignore: use_build_context_synchronously
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const CoachHome()));
-      } else if (userData.userType == 'clientKey' && _key == 'clientKey') {
-        // ignore: use_build_context_synchronously
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const ClientHome()));
-      } else if (userData.userType == "adminKey" && _key == "adminKey") {
-        // ignore: use_build_context_synchronously
-        showSnackBar(context, "You are not registered as a coach or client");
-      } else {
-        // ignore: use_build_context_synchronously
-        showSnackBar(context, "Some Error has occured");
+        showSnackBar(context, "Please check email to verify your email");
+        setState(() {
+          _isLoading = false;
+        });
       }
+
       // _key == 'coachKey'
       //     ? Navigator.pushReplacement(context,
       //         MaterialPageRoute(builder: (context) => const CoachHome()))
