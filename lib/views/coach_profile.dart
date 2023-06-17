@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/user.dart';
 import '../providers/get_user_type.dart';
 import '../utils/colors.dart';
 import 'auth/login.dart';
@@ -18,6 +19,7 @@ class CoachProfile extends StatefulWidget {
 
 class _CoachProfileState extends State<CoachProfile> {
   String finalKey = '';
+  UserModel? userModel;
   // String finalEmail = '';
   @override
   void initState() {
@@ -45,7 +47,6 @@ class _CoachProfileState extends State<CoachProfile> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Material(
       child: SizedBox(
@@ -65,12 +66,12 @@ class _CoachProfileState extends State<CoachProfile> {
                       color: AppColors().primaryColor,
                       borderRadius: const BorderRadius.only(
                           bottomRight: Radius.circular(50))),
-                  child: const Padding(
+                  child: Padding(
                     padding: EdgeInsets.only(bottom: 8.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
+                        const Text(
                           'Profile',
                           style: TextStyle(
                               fontSize: 28,
@@ -83,9 +84,22 @@ class _CoachProfileState extends State<CoachProfile> {
                             child: CircleAvatar(
                               radius: 50.0,
                               backgroundColor: Colors.white,
-                              child: CircleAvatar(
-                                radius: 47.0,
-                                backgroundImage: AssetImage('assets/img.png'),
+                              child: Consumer(
+                                builder: (context, ref, _) {
+                                  final userResult = ref.read(userProvider);
+                                  return userResult.when(
+                                    data: (userModel) {
+                                      return CircleAvatar(
+                                        radius: screenHeight * 0.06,
+                                        backgroundImage:
+                                            NetworkImage(userModel.photoUrl),
+                                      );
+                                    },
+                                    loading: () => const Text("..."),
+                                    error: (error, stackTrace) =>
+                                        Text('Error: $error'),
+                                  );
+                                },
                               ),
                             ),
                           ),

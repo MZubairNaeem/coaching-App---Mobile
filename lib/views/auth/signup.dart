@@ -1,5 +1,6 @@
 import 'package:coachingapp/utils/colors.dart';
 import 'package:coachingapp/widgets/large_button_blue.dart';
+import 'package:coachingapp/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -63,21 +64,7 @@ class _ClientSignupState extends State<ClientSignup> {
             context, MaterialPageRoute(builder: (context) => const Login()));
       }
     } catch (error) {
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('An error occurred!'),
-          content: const Text('Something went wrong. Please try again later.'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Okay'),
-              onPressed: () {
-                Navigator.of(ctx).pop();
-              },
-            )
-          ],
-        ),
-      );
+      showSnackBar(context, error.toString());
     }
     setState(() {
       _isLoading = false;
@@ -267,10 +254,12 @@ class _ClientSignupState extends State<ClientSignup> {
                                       readOnly: true,
                                       onTap: () async {
                                         var date = await showDatePicker(
+                                          
                                           context: context,
                                           initialDate: DateTime.now(),
                                           firstDate: DateTime(1975),
                                           lastDate: DateTime.now(),
+                                          
                                         );
                                         setState(() {
                                           if (date != null) {

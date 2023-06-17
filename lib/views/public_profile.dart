@@ -47,7 +47,7 @@ class _PublicProfileState extends State<PublicProfile> {
                   backgroundColor: AppColors().primaryColor,
                   child: CircleAvatar(
                     radius: screenWidth * 0.145,
-                    backgroundImage: const AssetImage('assets/img.png'),
+                    backgroundImage: NetworkImage(widget.userModel.photoUrl),
                     child: Align(
                       alignment: Alignment.bottomRight,
                       child: CircleAvatar(
