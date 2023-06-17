@@ -1,4 +1,5 @@
 import 'package:coachingapp/utils/colors.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'navscreens/chat/chatlist.dart';
@@ -23,6 +24,12 @@ class _HomeClientState extends State<ClientHome> {
     const Profile(),
   ];
 
+  @override
+  void initState() {
+    Firebase.initializeApp();
+    super.initState();
+  }
+
   final PageStorageBucket bucket = PageStorageBucket();
   Widget currentScreen = const CoachFind();
 
@@ -35,14 +42,17 @@ class _HomeClientState extends State<ClientHome> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors().primaryColor,
         onPressed: () {},
-        child: const Icon(Icons.calendar_month_outlined,color: Colors.white,),
+        child: const Icon(
+          Icons.calendar_month_outlined,
+          color: Colors.white,
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         notchMargin: 5,
         child: SizedBox(
-          height:screenHeight * 0.07,
+          height: screenHeight * 0.07,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -64,7 +74,9 @@ class _HomeClientState extends State<ClientHome> {
                         Icon(
                           Icons.feed,
                           size: 30,
-                          color: currentTab == 0 ? AppColors().primaryColor : Colors.grey,
+                          color: currentTab == 0
+                              ? AppColors().primaryColor
+                              : Colors.grey,
                         ),
                         // Text(
                         //   'Dashboard',
@@ -89,7 +101,9 @@ class _HomeClientState extends State<ClientHome> {
                         Icon(
                           Icons.notifications,
                           size: 35,
-                          color: currentTab == 1 ? AppColors().primaryColor : Colors.grey,
+                          color: currentTab == 1
+                              ? AppColors().primaryColor
+                              : Colors.grey,
                         ),
                         // Text(
                         //   'Chat',
@@ -120,7 +134,9 @@ class _HomeClientState extends State<ClientHome> {
                         Icon(
                           Icons.chat_bubble,
                           size: 35,
-                          color: currentTab == 2 ? AppColors().primaryColor : Colors.grey,
+                          color: currentTab == 2
+                              ? AppColors().primaryColor
+                              : Colors.grey,
                         ),
                         // Text(
                         //   'Profile',
@@ -134,7 +150,10 @@ class _HomeClientState extends State<ClientHome> {
                   MaterialButton(
                     minWidth: 40,
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const Profile()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Profile()));
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -142,7 +161,9 @@ class _HomeClientState extends State<ClientHome> {
                         Icon(
                           Icons.person_sharp,
                           size: 35,
-                          color: currentTab == 3 ? AppColors().primaryColor : Colors.grey,
+                          color: currentTab == 3
+                              ? AppColors().primaryColor
+                              : Colors.grey,
                         ),
                         // Text(
                         //   'Settings',

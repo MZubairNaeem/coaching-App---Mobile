@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coachingapp/models/chat_room_model.dart';
@@ -124,7 +123,7 @@ class _ChatListState extends State<ChatList> {
                             chatRoomSnapshot.docs[index].data()
                                 as Map<String, dynamic>);
                         Map<String, dynamic>? participant =
-                            chatRoomModel.participant as Map<String, dynamic>?;
+                            chatRoomModel.participant;
                         List<String> participantKeys =
                             participant!.keys.toList();
                         participantKeys.remove(userModel?.uid);

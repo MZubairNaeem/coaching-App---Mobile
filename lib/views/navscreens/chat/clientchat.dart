@@ -2,11 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coachingapp/main.dart';
 import 'package:coachingapp/models/message_model.dart';
 import 'package:coachingapp/models/user.dart';
-import 'package:coachingapp/providers/get_user_type.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/get.dart';
 
 import '../../../../utils/colors.dart';
 import '../../../models/chat_room_model.dart';

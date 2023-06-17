@@ -243,7 +243,7 @@ class _NewRoutineState extends State<NewRoutine> {
                 ),
                 Consumer(
                   builder: (context, ref, _) {
-                    final clients = ref.watch(subscribed_clients);
+                    final clients = ref.watch(subscribedClients);
                     final checkedItemIds = ref.watch(checkedItemIdsProvider);
                     count = checkedItemIds.length;
                     return clients.when(

@@ -1,4 +1,5 @@
 import 'package:coachingapp/providers/get_user_type.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../utils/colors.dart';
@@ -14,8 +15,14 @@ class CoachFind extends StatefulWidget {
 
 class _CoachFindState extends State<CoachFind> {
   @override
+  void initState() {
+    Firebase.initializeApp();
+    setState(() {});
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -125,8 +132,8 @@ class _CoachFindState extends State<CoachFind> {
                                     Container(
                                       height: 200,
                                       decoration: BoxDecoration(
-                                        image: const DecorationImage(
-                                          image: AssetImage('assets/img.png'),
+                                        image: DecorationImage(
+                                          image: NetworkImage(userModel.photoUrl),
                                           fit: BoxFit.cover,
                                         ),
                                         borderRadius: BorderRadius.circular(10),
@@ -147,10 +154,10 @@ class _CoachFindState extends State<CoachFind> {
                                         ),
                                         child: Row(
                                           children: [
-                                            const CircleAvatar(
+                                            CircleAvatar(
                                               radius: 30,
                                               backgroundImage:
-                                                  AssetImage('assets/img.png'),
+                                                  NetworkImage(userModel.photoUrl)
                                             ),
                                             Text(
                                               userModel.firstName,

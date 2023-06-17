@@ -23,6 +23,7 @@ class _ForgetPassState extends State<ForgetPass> {
     try {
       var res = await Auth().forgetPass(email: _email.text);
       if(res == 'Success'){
+        // ignore: use_build_context_synchronously
         Navigator.of(context).pop();
       }
     } catch (error) {
@@ -55,7 +56,6 @@ class _ForgetPassState extends State<ForgetPass> {
   }
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Material(

@@ -8,7 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/get_user_type.dart';
 import '../utils/colors.dart';
 import 'auth/login.dart';
-import 'coach_acc.dart';
 
 class CoachProfile extends StatefulWidget {
   const CoachProfile({Key? key}) : super(key: key);

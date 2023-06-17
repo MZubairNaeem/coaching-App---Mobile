@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coachingapp/models/assign_schedule.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 import '../models/Schedule.dart';
 
@@ -29,9 +28,9 @@ class SchduleViewModel {
           .collection('Schedule')
           .where('CoachId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
           .get();
-      querySnapshot.docs.forEach((element) {
+      for (var element in querySnapshot.docs) {
         schedules.add(Schedule.fromSnap(element));
-      });
+      }
     } catch (err) {
       print(err);
     }

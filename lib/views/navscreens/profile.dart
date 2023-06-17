@@ -41,7 +41,7 @@ class _ProfileState extends State<Profile> {
                       borderRadius: const BorderRadius.only(
                           bottomRight: Radius.circular(50))),
                   child: Padding(
-                    padding: EdgeInsets.only(bottom: 8.0),
+                    padding: const EdgeInsets.only(bottom: 8.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -61,7 +61,7 @@ class _ProfileState extends State<Profile> {
                                 return userResult.when(
                                   data: (userModel) {
                                     return CircleAvatar(
-                                      radius: screenHeight*0.06,
+                                      radius: screenHeight * 0.06,
                                       backgroundImage:
                                           NetworkImage(userModel.photoUrl),
                                     );

@@ -9,7 +9,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
@@ -28,10 +27,10 @@ class _UploadVideoState extends State<UploadVideo> {
   Uint8List? thumbnail;
   bool _isLoading = false;
 
-  Future<List<File>> pickFiles(BuildContext _context) async {
+  Future<List<File>> pickFiles(BuildContext context) async {
     showDialog(
-        context: _context,
-        builder: (_context) => Center(
+        context: context,
+        builder: (context) => Center(
               child: CircularProgressIndicator(
                 color: AppColors().primaryColor,
               ),
@@ -62,7 +61,7 @@ class _UploadVideoState extends State<UploadVideo> {
         }
       }
     }
-    Navigator.pop(_context);
+    Navigator.pop(context);
     return videos;
   }
 
@@ -178,7 +177,7 @@ class _UploadVideoState extends State<UploadVideo> {
                     ? Container(
                         height: screenHeight * 0.2,
                         width: screenWidth,
-                        margin: EdgeInsets.all(5.0),
+                        margin: const EdgeInsets.all(5.0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(

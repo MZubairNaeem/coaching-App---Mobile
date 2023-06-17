@@ -1,6 +1,5 @@
 import 'package:coachingapp/utils/colors.dart';
 import 'package:coachingapp/views/navscreens/schedule/newroutine.dart';
-import 'package:coachingapp/views/navscreens/schedule/workout_plan.dart';
 import 'package:flutter/material.dart';
 
 import '../../../widgets/calender_widget.dart';

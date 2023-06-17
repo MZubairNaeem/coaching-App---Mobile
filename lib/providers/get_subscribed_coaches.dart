@@ -4,26 +4,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/user.dart';
 
-final subscribed_coaches = FutureProvider<List<UserModel>>((ref) async {
-  String res = "Some error has occurred";
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final subscribedCoaches = FutureProvider<List<UserModel>>((ref) async {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
   try {
     //Getting all the subscribed coaches ids
-    QuerySnapshot<Map<String, dynamic>> doc = await _firestore
+    QuerySnapshot<Map<String, dynamic>> doc = await firestore
         .collection('Subscriptions')
-        .where('subscriber', isEqualTo: _auth.currentUser!.uid)
+        .where('subscriber', isEqualTo: auth.currentUser!.uid)
         .get();
 
-    List subscribed_coaches_ids = doc.docs.map((snapshot) {
+    List subscribedCoachesIds = doc.docs.map((snapshot) {
       Map<String, dynamic> data = snapshot.data();
       return data['subscribed'];
     }).toList();
     //Getting all the subscribed coaches
-    doc = await _firestore
+    doc = await firestore
         .collection('Users')
         .where('userType', isEqualTo: 'coachKey')
-        .where('uid', whereIn: subscribed_coaches_ids)
+        .where('uid', whereIn: subscribedCoachesIds)
         .get();
 
     List<UserModel> userModels = doc.docs.map((snapshot) {

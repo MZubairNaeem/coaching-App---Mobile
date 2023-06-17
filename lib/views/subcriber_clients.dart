@@ -57,7 +57,7 @@ class SubscriberClients extends StatelessWidget {
             child: Consumer(
               builder: (context, ref, _) {
                 // Getting coaches List
-                final coaches = ref.watch(subscribed_clients);
+                final coaches = ref.watch(subscribedClients);
                 return coaches.when(
                   data: (userModelList) => userModelList.isEmpty
                       ? Center(

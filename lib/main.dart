@@ -1,3 +1,4 @@
+import 'package:coachingapp/providers/firebase_helper.dart';
 import 'package:coachingapp/utils/colors.dart';
 import 'package:coachingapp/utils/strings.dart';
 import 'package:coachingapp/views/auth/login.dart';
@@ -14,8 +15,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uuid/uuid.dart';
 import 'firebase_options.dart';
+import 'models/user.dart';
 
-var uuid = Uuid();
+var uuid = const Uuid();
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,6 +56,16 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  UserModel? userModel;
+  Future<UserModel> getUserData() async {
+    UserModel user = await FirebaseHelper.getUserModelById(
+        FirebaseAuth.instance.currentUser!.uid);
+    setState(() {
+      userModel = user;
+    });
+    return user;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Sizer(
@@ -69,7 +81,8 @@ class _MyAppState extends State<MyApp> {
                 if (snapshot.connectionState == ConnectionState.active) {
                   if (snapshot.hasData) {
                     if (finalKey == 'client') {
-                      return const ClientHome();
+                      return const ClientHome(
+                      );
                     } else if (finalKey == 'coach') {
                       return const CoachHome();
                       // ignore: unnecessary_null_comparison
@@ -97,7 +110,8 @@ class _MyAppState extends State<MyApp> {
       },
     );
   }
-   @override
+
+  @override
   void dispose() {
     providerContainer.dispose(); // Dispose the container when the app is closed
     super.dispose();

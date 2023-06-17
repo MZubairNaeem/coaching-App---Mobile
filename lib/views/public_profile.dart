@@ -18,10 +18,6 @@ class PublicProfile extends StatefulWidget {
 
 class _PublicProfileState extends State<PublicProfile> {
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,15 +60,15 @@ class _PublicProfileState extends State<PublicProfile> {
 
                             return subscriptionStatus.maybeWhen(
                               data: (subscribed) => subscribed
-                                  ? Icon(Icons.check)
+                                  ? const Icon(Icons.check)
                                   : GestureDetector(
                                       onTap: () {
                                         Auth().Subscirbe(widget.userModel.uid);
                                         ref.refresh(subscriptionProvider);
                                       },
-                                      child: Icon(Icons.add),
+                                      child: const Icon(Icons.add),
                                     ),
-                              orElse: () => CircularProgressIndicator(),
+                              orElse: () => const CircularProgressIndicator(),
                             );
                           },
                         ),

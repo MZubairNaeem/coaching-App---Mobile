@@ -51,7 +51,7 @@ class _VideoPreviewState extends State<VideoPreview> {
                     size: 25,
                   ),
                 )),
-            loading: () => CircularProgressIndicator(),
+            loading: () => const CircularProgressIndicator(),
             error: (error, stackTrace) => const Center(
                   child: Text("Error"),
                 ));

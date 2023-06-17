@@ -163,28 +163,28 @@ class Auth extends ChangeNotifier {
   }
 
   //Subcribe to coach
-  Future<String> Subscirbe(String coach_id) async {
-    var user_id = _auth.currentUser!.uid;
+  Future<String> Subscirbe(String coachId) async {
+    var userId = _auth.currentUser!.uid;
     try {
       await _firestore
           .collection('Subscriptions')
           .doc(DateTime.now().millisecondsSinceEpoch.toString())
-          .set({'subscriber': user_id, 'subscribed': coach_id});
+          .set({'subscriber': userId, 'subscribed': coachId});
       return "Success";
     } catch (e) {
       return e.toString();
     }
   }
 
-  Future<bool> checkSubscription(String coach_id) async {
-    var user_id = _auth.currentUser!.uid;
+  Future<bool> checkSubscription(String coachId) async {
+    var userId = _auth.currentUser!.uid;
     try {
       var data = await _firestore
           .collection('Subscriptions')
-          .where('subscriber', isEqualTo: user_id)
-          .where('subscribed', isEqualTo: coach_id)
+          .where('subscriber', isEqualTo: userId)
+          .where('subscribed', isEqualTo: coachId)
           .get();
-      if (data.docs.length > 0) {
+      if (data.docs.isNotEmpty) {
         return true;
       } else {
         return false;

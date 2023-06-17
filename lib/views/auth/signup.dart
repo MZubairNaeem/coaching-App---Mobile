@@ -28,7 +28,6 @@ class _ClientSignupState extends State<ClientSignup> {
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  String? _userType;
   Function(String)? onLogin;
 
   Future<String?> _getUserType() async {
@@ -50,15 +49,15 @@ class _ClientSignupState extends State<ClientSignup> {
     });
     try {
       var res = await Auth().signUpUser(
-        firstName: _nameController.text,
-        email: _emailController.text,
-        password: _passwordController.text,
-        location: _locationController.text,
-        dateOfBirth: _dateOfBirthController.text,
-        phoneNumber: _phoneNumberController.text,
-        userType: widget.keyValue,
-        photoUrl: "https://funylife.in/wp-content/uploads/2023/04/58_Cute-Girl-Pic-WWW.FUNYLIFE.IN_-1-1024x1024.jpg"
-      );
+          firstName: _nameController.text,
+          email: _emailController.text,
+          password: _passwordController.text,
+          location: _locationController.text,
+          dateOfBirth: _dateOfBirthController.text,
+          phoneNumber: _phoneNumberController.text,
+          userType: widget.keyValue,
+          photoUrl:
+              "https://funylife.in/wp-content/uploads/2023/04/58_Cute-Girl-Pic-WWW.FUNYLIFE.IN_-1-1024x1024.jpg");
       if (res == 'Success') {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => const Login()));
@@ -185,6 +184,14 @@ class _ClientSignupState extends State<ClientSignup> {
                                                   AppColors().darKShadowColor,
                                             ),
                                           ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            borderSide: BorderSide(
+                                                width: 2,
+                                                color: AppColors()
+                                                    .primaryColor), //<-- SEE HERE
+                                          ),
                                           enabledBorder: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(50.0),
@@ -229,6 +236,14 @@ class _ClientSignupState extends State<ClientSignup> {
                                                 width: 1,
                                                 color: AppColors()
                                                     .lightShadowColor), //<-- SEE HERE
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            borderSide: BorderSide(
+                                                width: 2,
+                                                color: AppColors()
+                                                    .primaryColor), //<-- SEE HERE
                                           ),
                                           border: OutlineInputBorder(
                                             borderRadius:
@@ -294,6 +309,14 @@ class _ClientSignupState extends State<ClientSignup> {
                                                 color: AppColors()
                                                     .lightShadowColor), //<-- SEE HERE
                                           ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            borderSide: BorderSide(
+                                                width: 2,
+                                                color: AppColors()
+                                                    .primaryColor), //<-- SEE HERE
+                                          ),
                                           border: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(50.0),
@@ -331,6 +354,14 @@ class _ClientSignupState extends State<ClientSignup> {
                                                 color: AppColors()
                                                     .lightShadowColor), //<-- SEE HERE
                                           ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            borderSide: BorderSide(
+                                                width: 2,
+                                                color: AppColors()
+                                                    .primaryColor), //<-- SEE HERE
+                                          ),
                                           border: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(50.0),
@@ -360,6 +391,14 @@ class _ClientSignupState extends State<ClientSignup> {
                                               color:
                                                   AppColors().darKShadowColor,
                                             ),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            borderSide: BorderSide(
+                                                width: 2,
+                                                color: AppColors()
+                                                    .primaryColor), //<-- SEE HERE
                                           ),
                                           enabledBorder: OutlineInputBorder(
                                             borderRadius:
@@ -416,6 +455,14 @@ class _ClientSignupState extends State<ClientSignup> {
                                                 width: 1,
                                                 color: AppColors()
                                                     .lightShadowColor), //<-- SEE HERE
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            borderSide: BorderSide(
+                                                width: 2,
+                                                color: AppColors()
+                                                    .primaryColor), //<-- SEE HERE
                                           ),
                                           border: OutlineInputBorder(
                                             borderRadius:

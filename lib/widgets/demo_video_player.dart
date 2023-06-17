@@ -1,5 +1,4 @@
 import 'package:coachingapp/utils/colors.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -75,7 +74,7 @@ class _DemoVideoPlayerState extends State<DemoVideoPlayer> {
             color: Colors.black54,
             child: VideoProgressIndicator(_controller,
                 allowScrubbing: true,
-                padding: EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(10.0),
                 colors: VideoProgressColors(
                   playedColor: AppColors().primaryColor,
                   bufferedColor: AppColors().senderColor,

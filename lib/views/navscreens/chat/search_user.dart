@@ -2,11 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coachingapp/main.dart';
 import 'package:coachingapp/models/user.dart';
 import 'package:coachingapp/models/chat_room_model.dart';
-import 'package:coachingapp/providers/firebase_helper.dart';
-import 'package:coachingapp/providers/get_user_type.dart';
 import 'package:coachingapp/widgets/large_button_blue.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/colors.dart';
@@ -39,7 +36,7 @@ class _SearchUserState extends State<SearchUser> {
         .where("participant.${widget.userModel.uid}", isEqualTo: true)
         .where("participant.${targetUser.uid}", isEqualTo: true)
         .get();
-    if (snapshot.docs.length > 0) {
+    if (snapshot.docs.isNotEmpty) {
       var docData = snapshot.docs.first.data();
       ChatRoomModel existingChatRoom =
           ChatRoomModel.fromMap(docData as Map<String, dynamic>);
@@ -161,7 +158,7 @@ class _SearchUserState extends State<SearchUser> {
                             },
                             title: Text(searchUser.firstName),
                             subtitle: Text(searchUser.email),
-                            trailing: Icon(Icons.message),
+                            trailing: const Icon(Icons.message),
                           ),
                         );
                       } else {
@@ -173,7 +170,7 @@ class _SearchUserState extends State<SearchUser> {
                       return const Center(child: Text("No Results Found"));
                     }
                   } else {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 },
               ),

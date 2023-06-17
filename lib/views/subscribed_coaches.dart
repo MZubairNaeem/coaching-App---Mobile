@@ -1,7 +1,6 @@
 import 'package:coachingapp/views/public_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../providers/get_subscribed_coaches.dart';
 import '../utils/colors.dart';
 import '../widgets/custom_background.dart';
@@ -58,7 +57,7 @@ class SubscribedCoaches extends StatelessWidget {
             child: Consumer(
               builder: (context, ref, _) {
                 // Getting coaches List
-                final coaches = ref.watch(subscribed_coaches);
+                final coaches = ref.watch(subscribedCoaches);
                 return coaches.when(
                   data: (userModelList) => userModelList.isEmpty
                       ? Center(

@@ -1,23 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-// class UserModel {
-//   String username;
-//   String email;
-//   String uid;
-//   String location;
-//   String dateOfBirth;
-//   String phoneNumber;
-
-//   UserModel({
-//     required this.username,
-//     required this.email,
-//     required this.uid,
-//     required this.location,
-//     required this.dateOfBirth,
-//     required this.phoneNumber,
-//   });
-// }
-
 class UserModel {
   String uid;
   String firstName;

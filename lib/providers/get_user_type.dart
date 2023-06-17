@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 final userProvider = FutureProvider<UserModel>((ref) async {
   String res = "Some error has occurred";
-  final FirebaseAuth auth = FirebaseAuth.instance;
+  // final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   DocumentSnapshot doc = await firestore
       .collection('Users')

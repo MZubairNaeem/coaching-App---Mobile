@@ -15,8 +15,8 @@ class WorkOutPlan extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _titleController = TextEditingController();
-    TextEditingController _descriptionController = TextEditingController();
+    TextEditingController titleController = TextEditingController();
+    TextEditingController descriptionController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors().whiteColor,
@@ -44,7 +44,7 @@ class WorkOutPlan extends StatelessWidget {
                 height: 10,
               ),
               TextField(
-                controller: _titleController,
+                controller: titleController,
                 decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -71,7 +71,7 @@ class WorkOutPlan extends StatelessWidget {
                 height: 10,
               ),
               TextField(
-                controller: _descriptionController,
+                controller: descriptionController,
                 maxLines: 5,
                 keyboardType: TextInputType.multiline,
                 decoration: InputDecoration(
@@ -95,13 +95,13 @@ class WorkOutPlan extends StatelessWidget {
               LargeButton(
                 name: "Save",
                 onPressed: () async {
-                  if (_titleController.value.text.isNotEmpty &&
-                      _descriptionController.value.text.isNotEmpty) {
+                  if (titleController.value.text.isNotEmpty &&
+                      descriptionController.value.text.isNotEmpty) {
                     Schedule schedule = Schedule(
                         CoachId: FirebaseAuth.instance.currentUser!.uid,
                         id: DateTime.now().millisecondsSinceEpoch.toString(),
-                        title: _titleController.text,
-                        description: _descriptionController.text);
+                        title: titleController.text,
+                        description: descriptionController.text);
                     String result =
                         await SchduleViewModel().AddSchedule(schedule);
                     if (result == "Success") {
