@@ -12,7 +12,7 @@ import '../../../widgets/large_button_trasparent_text_left_align.dart';
 import '../../providers/get_user_type.dart';
 import '../../viewmodels/storage_method.dart';
 import '../../widgets/image_picker.dart';
-import '../auth/forgetpass.dart';
+import '../auth/forget_pass.dart';
 
 class ClientAccount extends StatefulWidget {
   const ClientAccount({Key? key}) : super(key: key);

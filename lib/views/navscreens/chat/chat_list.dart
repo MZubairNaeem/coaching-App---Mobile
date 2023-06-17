@@ -4,7 +4,7 @@ import 'package:coachingapp/models/chat_room_model.dart';
 import 'package:coachingapp/models/user.dart';
 import 'package:coachingapp/providers/firebase_helper.dart';
 import 'package:coachingapp/utils/colors.dart';
-import 'package:coachingapp/views/navscreens/chat/clientchat.dart';
+import 'package:coachingapp/views/navscreens/chat/chat.dart';
 import 'package:coachingapp/views/navscreens/chat/search_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

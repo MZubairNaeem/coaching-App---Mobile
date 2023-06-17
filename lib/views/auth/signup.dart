@@ -58,10 +58,11 @@ class _ClientSignupState extends State<ClientSignup> {
           phoneNumber: _phoneNumberController.text,
           userType: widget.keyValue,
           photoUrl:
-              "https://funylife.in/wp-content/uploads/2023/04/58_Cute-Girl-Pic-WWW.FUNYLIFE.IN_-1-1024x1024.jpg");
+              "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Windows_10_Default_Profile_Picture.svg/2048px-Windows_10_Default_Profile_Picture.svg.png");
       if (res == 'Success') {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => const Login()));
+        showSnackBar(context, "Account Created Successfully");
       }
     } catch (error) {
       showSnackBar(context, error.toString());
@@ -159,7 +160,7 @@ class _ClientSignupState extends State<ClientSignup> {
                                     elevation: 3.0,
                                     shadowColor: AppColors().lightShadowColor,
                                     borderRadius: BorderRadius.circular(50.0),
-                                    child: TextField(
+                                    child: TextFormField(
                                       controller: _nameController,
                                       decoration: InputDecoration(
                                           suffixIcon: Padding(
@@ -204,7 +205,7 @@ class _ClientSignupState extends State<ClientSignup> {
                                     elevation: 3.0,
                                     shadowColor: AppColors().lightShadowColor,
                                     borderRadius: BorderRadius.circular(50.0),
-                                    child: TextField(
+                                    child: TextFormField(
                                       controller: _emailController,
                                       decoration: InputDecoration(
                                           suffixIcon: Padding(
@@ -249,18 +250,34 @@ class _ClientSignupState extends State<ClientSignup> {
                                     elevation: 3.0,
                                     shadowColor: AppColors().lightShadowColor,
                                     borderRadius: BorderRadius.circular(50.0),
-                                    child: TextField(
+                                    child: TextFormField(
                                       controller: _dateOfBirthController,
                                       readOnly: true,
                                       onTap: () async {
                                         var date = await showDatePicker(
-                                          
-                                          context: context,
-                                          initialDate: DateTime.now(),
-                                          firstDate: DateTime(1975),
-                                          lastDate: DateTime.now(),
-                                          
-                                        );
+                                            context: context,
+                                            initialDate: DateTime.now(),
+                                            firstDate: DateTime(1975),
+                                            lastDate: DateTime.now(),
+                                            builder: (context, child) {
+                                              return Theme(
+                                                data:
+                                                    ThemeData.light().copyWith(
+                                                  colorScheme:
+                                                      ColorScheme.light(
+                                                    primary: AppColors()
+                                                        .primaryColor,
+                                                    onPrimary: Colors.white,
+                                                    surface: AppColors()
+                                                        .primaryColor,
+                                                    onSurface: Colors.black,
+                                                  ),
+                                                  dialogBackgroundColor:
+                                                      Colors.white,
+                                                ),
+                                                child: child!,
+                                              );
+                                            });
                                         setState(() {
                                           if (date != null) {
                                             var myYear =
@@ -323,7 +340,7 @@ class _ClientSignupState extends State<ClientSignup> {
                                     elevation: 3.0,
                                     shadowColor: AppColors().lightShadowColor,
                                     borderRadius: BorderRadius.circular(50.0),
-                                    child: TextField(
+                                    child: TextFormField(
                                       controller: _locationController,
                                       decoration: InputDecoration(
                                           suffixIcon: Padding(
@@ -368,7 +385,7 @@ class _ClientSignupState extends State<ClientSignup> {
                                     elevation: 3.0,
                                     shadowColor: AppColors().lightShadowColor,
                                     borderRadius: BorderRadius.circular(50.0),
-                                    child: TextField(
+                                    child: TextFormField(
                                       controller: _phoneNumberController,
                                       keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
@@ -414,7 +431,7 @@ class _ClientSignupState extends State<ClientSignup> {
                                     elevation: 3.0,
                                     shadowColor: AppColors().lightShadowColor,
                                     borderRadius: BorderRadius.circular(50.0),
-                                    child: TextField(
+                                    child: TextFormField(
                                       controller: _passwordController,
                                       obscureText: _obscurePassword,
                                       decoration: InputDecoration(

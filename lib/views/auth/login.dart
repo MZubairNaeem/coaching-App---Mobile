@@ -13,7 +13,7 @@ import '../../../widgets/large_button_trasparent.dart';
 import '../../models/user.dart';
 import '../../providers/firebase_helper.dart';
 import '../client_home.dart';
-import 'forgetpass.dart';
+import 'forget_pass.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);

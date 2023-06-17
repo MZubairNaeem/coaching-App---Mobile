@@ -39,7 +39,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final providerContainer = ProviderContainer();
-  String finalKey = '';
+  String? finalKey;
   @override
   void initState() {
     super.initState();
@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
         await SharedPreferences.getInstance();
     var obtainedKey = sharedPreferences.getString('key');
     setState(() {
-      finalKey = obtainedKey!;
+      finalKey = obtainedKey;
     });
   }
 

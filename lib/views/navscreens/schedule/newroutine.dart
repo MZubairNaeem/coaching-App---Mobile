@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coachingapp/models/assign_schedule.dart';
-import 'package:coachingapp/viewmodels/scheduleViewModel.dart';
+import 'package:coachingapp/viewmodels/schedule_view_model.dart';
 import 'package:coachingapp/views/navscreens/schedule/workout_plan.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

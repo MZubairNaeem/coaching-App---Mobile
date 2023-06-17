@@ -2,7 +2,7 @@
 
 import 'package:coachingapp/models/Schedule.dart';
 import 'package:coachingapp/utils/colors.dart';
-import 'package:coachingapp/viewmodels/scheduleViewModel.dart';
+import 'package:coachingapp/viewmodels/schedule_view_model.dart';
 import 'package:coachingapp/views/navscreens/schedule/newroutine.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/colors.dart';
-import 'clientchat.dart';
+import 'chat.dart';
 
 class SearchUser extends StatefulWidget {
   final UserModel userModel;

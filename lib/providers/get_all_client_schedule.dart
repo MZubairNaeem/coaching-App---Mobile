@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/Schedule.dart';
-import '../viewmodels/scheduleViewModel.dart';
+import '../viewmodels/schedule_view_model.dart';
 
 final scheduleProvider = StreamProvider<List<Schedule>>((ref) {
   try {

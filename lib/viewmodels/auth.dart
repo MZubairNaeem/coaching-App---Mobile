@@ -32,12 +32,6 @@ class Auth extends ChangeNotifier {
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
 
-        print(cred.user!.phoneNumber);
-
-        // String photoUrl = await StorageMethod()
-        //     .uploadImageToStorage('profilePic', file, false);
-        //add user
-
         model.UserModel user = model.UserModel(
           uid: cred.user!.uid,
           firstName: firstName,

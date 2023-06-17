@@ -2,7 +2,7 @@ import 'package:coachingapp/utils/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import 'navscreens/chat/chatlist.dart';
+import 'navscreens/chat/chat_list.dart';
 import 'navscreens/coachfind.dart';
 import 'navscreens/notification.dart';
 import 'navscreens/profile.dart';
