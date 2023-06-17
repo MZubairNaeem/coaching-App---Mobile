@@ -103,7 +103,6 @@ class _NewRoutineState extends State<NewRoutine> {
               builder: (context, ref, _) {
                 final schedule = ref.watch(scheduleProvider);
                 ref.refresh(scheduleProvider);
-
                 return schedule.maybeWhen(
                   data: (data) => data.isEmpty
                       ? Center(
@@ -436,18 +435,18 @@ class _NewRoutineState extends State<NewRoutine> {
                                               ),
                                               isChecked:
                                                   checkedVideoURL.contains(
-                                                      data[index].videoUrl),
+                                                      data[index].videoId),
                                               onTap: (onTap) {
                                                 if (onTap == true) {
                                                   checkedVideoURL.add(
                                                       data[index]
-                                                          .videoUrl
+                                                          .videoId
                                                           .toString());
                                                   count++;
                                                 } else {
                                                   checkedVideoURL.remove(
                                                       data[index]
-                                                          .videoUrl
+                                                          .videoId
                                                           .toString());
                                                   count--;
                                                 }
@@ -587,7 +586,7 @@ class _NewRoutineState extends State<NewRoutine> {
                                     children: [
                                       const CircularProgressIndicator(),
                                       Padding(
-                                        padding: const EdgeInsets.all(16.0),
+                                        padding: const EdgeInsets.all(8.0),
                                         child: Text(
                                           'Assigning Schedule ...',
                                           style: TextStyle(
@@ -611,6 +610,7 @@ class _NewRoutineState extends State<NewRoutine> {
                             clients: checkedItemIds,
                             coachId: FirebaseAuth.instance.currentUser!.uid,
                             assignDate: timestamp,
+                            created_at: Timestamp.now(),
                             id: DateTime.now()
                                 .millisecondsSinceEpoch
                                 .toString(),

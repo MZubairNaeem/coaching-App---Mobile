@@ -7,6 +7,7 @@ class AssignSchedule {
   List<dynamic>? videos;
   List<dynamic>? clients;
   Timestamp? assignDate;
+  Timestamp? created_at;
 
   AssignSchedule(
       {this.id,
@@ -14,7 +15,8 @@ class AssignSchedule {
       this.scheduleId,
       this.videos,
       this.clients,
-      this.assignDate});
+      this.assignDate,
+      this.created_at});
 
   AssignSchedule.fromMap(Map<String, dynamic> map) {
     id = map['id'];
@@ -23,6 +25,7 @@ class AssignSchedule {
     videos = map['videos'];
     clients = map['clients'];
     assignDate = map['assignDate'];
+    created_at = map['created_at'];
   }
 
   Map<String, dynamic> toJson() {
@@ -33,6 +36,7 @@ class AssignSchedule {
       'videos': videos,
       'clients': clients,
       'assignDate': assignDate,
+      'created_at': created_at,
     };
   }
 }

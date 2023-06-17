@@ -1,4 +1,3 @@
-
 import 'package:chewie/chewie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coachingapp/utils/colors.dart';
@@ -7,29 +6,37 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../models/videos.dart';
+import '../../../providers/get_demoVideos.dart';
 
-final videoListProvider = FutureProvider<List<Video>>((ref) async {
-  QuerySnapshot videoSnapshot =
-      await FirebaseFirestore.instance.collection('Videos').get();
+// final videoListProvider = FutureProvider<List<Video>>((ref) async {
+//   QuerySnapshot videoSnapshot =
+//       await FirebaseFirestore.instance.collection('Videos').get();
 
-  return videoSnapshot.docs.map((doc) {
-    return Video(
-      videoUrl: doc['videoUrl'],
-      videoTitle: doc['videoTitle'],
-      videoDescription: doc['videoDescription'],
-      videoId: 'videoId',
-      videoThumbnail: doc['videoThumbnail'],
-    );
-  }).toList();
-});
+//   return videoSnapshot.docs.map((doc) {
+//     return Video(
+//       videoUrl: doc['videoUrl'],
+//       videoTitle: doc['videoTitle'],
+//       videoDescription: doc['videoDescription'],
+//       videoId: 'videoId',
+//       videoThumbnail: doc['videoThumbnail'],
+//     );
+//   }).toList();
+// });
 
-class PlayVideos extends ConsumerWidget {
-  const PlayVideos({Key? key}) : super(key: key);
+class PlayVideo extends StatefulWidget {
+  final List videoIDs;
+  const PlayVideo({super.key, required this.videoIDs});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final videoListAsync = ref.watch(videoListProvider);
+  State<PlayVideo> createState() => _PlayVideoState();
+}
 
+class _PlayVideoState extends State<PlayVideo> {
+  @override
+  Widget build(BuildContext context) {
+    final VideoLists = StreamProvider<List<Video>>(
+      (ref) => getScheduleVideos(widget.videoIDs),
+    );
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -50,22 +57,24 @@ class PlayVideos extends ConsumerWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-         
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            videoListAsync.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stackTrace) => Text('Error: $error'),
-              data: (videoList) {
-                return Column(
-                  children: [
-                    if (videoList.isNotEmpty)
-                      VideoPlayerWidget(videoList: videoList)
-                    else
-                      const Text('No videos available'),
-                  ],
+            Consumer(
+              builder: (context, ref, child) {
+                final videoList = ref.watch(VideoLists);
+                ref.refresh(VideoLists);
+                return videoList.when(
+                  data: (videoList) {
+                    return VideoPlayerWidget(videoList: videoList);
+                  },
+                  loading: () => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  error: (error, stackTrace) => Center(
+                    child: Text(error.toString()),
+                  ),
                 );
               },
             ),

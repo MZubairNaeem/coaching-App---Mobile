@@ -34,7 +34,8 @@ class _CoachFindState extends State<CoachFind> {
             padding: const EdgeInsets.only(left: 25.0),
             child: Consumer(
               builder: (context, ref, _) {
-                final userResult = ref.read(userProvider);
+                final userResult = ref.watch(userProvider);
+                ref.refresh(userProvider);
                 return userResult.when(
                   data: (userModel) {
                     return CircleAvatar(
@@ -58,7 +59,8 @@ class _CoachFindState extends State<CoachFind> {
               ),
               Consumer(
                 builder: (context, ref, _) {
-                  final userResult = ref.read(userProvider);
+                  final userResult = ref.watch(userProvider);
+                  ref.refresh(userProvider);
                   return userResult.when(
                     data: (userModel) {
                       return Text(
@@ -133,7 +135,8 @@ class _CoachFindState extends State<CoachFind> {
                                       height: 200,
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
-                                          image: NetworkImage(userModel.photoUrl),
+                                          image:
+                                              NetworkImage(userModel.photoUrl),
                                           fit: BoxFit.cover,
                                         ),
                                         borderRadius: BorderRadius.circular(10),
@@ -155,15 +158,16 @@ class _CoachFindState extends State<CoachFind> {
                                         child: Row(
                                           children: [
                                             CircleAvatar(
-                                              radius: 30,
-                                              backgroundImage:
-                                                  NetworkImage(userModel.photoUrl)
-                                            ),
-                                            Text(
-                                              userModel.firstName,
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20,
+                                                radius: 30,
+                                                backgroundImage: NetworkImage(
+                                                    userModel.photoUrl)),
+                                            Expanded(
+                                              child: Text(
+                                                userModel.firstName,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20,
+                                                ),
                                               ),
                                             ),
                                           ],

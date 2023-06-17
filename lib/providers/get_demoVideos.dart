@@ -47,3 +47,36 @@ Stream<List<Video>> getVideosStream(var id) async* {
   }
   yield videos;
 }
+
+Stream<List<Video>> getScheduleVideos(List VideosIds) async* {
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  //Split the videoIds into smaller batches if the length is greater than 10
+  List<List<dynamic>> batches = [];
+  const int batchSize = 10;
+  for (int i = 0; i < VideosIds.length; i += batchSize) {
+    final end =
+        i + batchSize < VideosIds.length ? i + batchSize : VideosIds.length;
+    batches.add(VideosIds.sublist(i, end));
+  }
+
+  // Getting videos using multiple queries
+  List<Video> videos = [];
+  for (final batch in batches) {
+    QuerySnapshot<Map<String, dynamic>> doc = await firestore
+        .collection('Videos')
+        .where('videoId', whereIn: batch)
+        .get();
+    videos.addAll(doc.docs.map((snapshot) {
+      Map<String, dynamic> data = snapshot.data();
+      return Video(
+        videoId: data['videoId'],
+        videoTitle: data['videoTitle'],
+        videoDescription: data['videoDescription'],
+        videoUrl: data['videoUrl'],
+        videoThumbnail: data['videoThumbnail'],
+      );
+    }).toList());
+  }
+  yield videos;
+}

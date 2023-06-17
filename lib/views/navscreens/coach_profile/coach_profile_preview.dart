@@ -52,6 +52,7 @@ class _CoachProfilePreviewState extends State<CoachProfilePreview> {
               Consumer(
                 builder: (context, ref, _) {
                   final userResult = ref.watch(userProvider);
+                  ref.refresh(userProvider);
                   return userResult.when(
                     data: (userModel) {
                       return Text(
