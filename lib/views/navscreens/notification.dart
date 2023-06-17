@@ -4,6 +4,7 @@ import 'package:coachingapp/utils/colors.dart';
 import 'package:coachingapp/views/navscreens/schedule/playvideos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../providers/get_schedule_notification.dart';
 
@@ -56,6 +57,17 @@ class _ClientNotificationState extends State<ClientNotification> {
                     return ListView.builder(
                       itemCount: notification.length,
                       itemBuilder: (context, index) {
+                        DateTime? assignDateTime =
+                            notification[index].assignDate?.toDate();
+                        DateTime now = DateTime.now();
+                        String formattedTime =
+                            DateFormat.jm().format(assignDateTime!);
+                        String formattedDate =
+                            DateFormat.yMd().format(assignDateTime);
+                        DateTime? createdDateTime =
+                            notification[index].created_at?.toDate();
+                        String CreatedFormattedTime =
+                            DateFormat.jm().format(createdDateTime!);
                         return Padding(
                           padding: EdgeInsets.only(
                               bottom: screenHeight * 0.02,
@@ -105,8 +117,7 @@ class _ClientNotificationState extends State<ClientNotification> {
                                     borderRadius: BorderRadius.circular(50.0),
                                   ),
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Padding(
                                         padding:
@@ -126,12 +137,10 @@ class _ClientNotificationState extends State<ClientNotification> {
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(
-                                            right: screenWidth * 0.1),
+                                            left: screenWidth * 0.02),
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
                                           children: [
                                             FutureBuilder<String>(
                                               future: getSchuduleTitle(
@@ -152,10 +161,11 @@ class _ClientNotificationState extends State<ClientNotification> {
                                                     ),
                                                   );
                                                 } else if (snapshot.hasError) {
-                                                  return Text(
+                                                  return const Text(
                                                       'Error retrieving schedule title');
                                                 } else {
-                                                  return Text('Loading...');
+                                                  return const Text(
+                                                      'Loading...');
                                                 }
                                               },
                                             ),
@@ -171,19 +181,44 @@ class _ClientNotificationState extends State<ClientNotification> {
                                                 ),
                                                 //Show the date not time of the schedule
                                                 Text(
-                                                  notification[index]
-                                                      .assignDate!
-                                                      .toDate()
-                                                      .toString(),
+                                                  (assignDateTime.year ==
+                                                              now.year &&
+                                                          assignDateTime
+                                                                  .month ==
+                                                              now.month &&
+                                                          assignDateTime.day ==
+                                                              now.day)
+                                                      ? formattedTime
+                                                      : formattedDate,
                                                   style: TextStyle(
                                                     color: AppColors()
                                                         .darKShadowColor,
-                                                    fontSize: 8,
+                                                    fontSize: 12,
                                                   ),
                                                 ),
                                               ],
                                             ),
                                           ],
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Container(
+                                          margin: EdgeInsets.only(
+                                              right: screenWidth * 0.08),
+                                          height: screenWidth * 0.08,
+                                          width: screenWidth * 0.08,
+                                          decoration: BoxDecoration(
+                                            color: AppColors().primaryColor,
+                                            borderRadius: BorderRadius.circular(
+                                                screenWidth * 0.1),
+                                          ),
+                                          child: Center(
+                                            child: Icon(
+                                              Icons.notifications,
+                                              color: Colors.white,
+                                              size: screenWidth * 0.05,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -193,13 +228,17 @@ class _ClientNotificationState extends State<ClientNotification> {
                                   height: screenHeight * 0.01,
                                 ),
                                 //Time of the schedule
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    "${notification[index].created_at!.toDate().hour}:${notification[index].created_at!.toDate().minute} ${notification[index].created_at!.toDate().hour > 12 ? "PM" : "AM"}",
-                                    style: TextStyle(
-                                      color: AppColors().darKShadowColor,
-                                      fontSize: 8,
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      right: screenWidth * 0.02),
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      CreatedFormattedTime,
+                                      style: TextStyle(
+                                        color: AppColors().darKShadowColor,
+                                        fontSize: 14,
+                                      ),
                                     ),
                                   ),
                                 )

@@ -9,6 +9,7 @@ import '../models/user.dart';
 import '../providers/get_user_type.dart';
 import '../utils/colors.dart';
 import 'auth/login.dart';
+import 'subscription/coach_settings.dart/plans.dart';
 
 class CoachProfile extends StatefulWidget {
   const CoachProfile({Key? key}) : super(key: key);
@@ -156,6 +157,9 @@ class _CoachProfileState extends State<CoachProfile> {
                                           color: AppColors().darKShadowColor,
                                         ),
                                       ),
+                                      SizedBox(
+                                        height: screenHeight * 0.02,
+                                      ),
                                       LargeButtonTransparentLeftAlignText(
                                         name: "My Account",
                                         onPressed: () {
@@ -182,7 +186,13 @@ class _CoachProfileState extends State<CoachProfile> {
                           ),
                           LargeButtonTransparentLeftAlignText(
                             name: "My Program",
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const PlanDescription()));
+                            },
                           ),
                           LargeButtonTransparentLeftAlignText(
                             name: "My Clients",

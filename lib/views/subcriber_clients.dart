@@ -58,6 +58,7 @@ class SubscriberClients extends StatelessWidget {
               builder: (context, ref, _) {
                 // Getting coaches List
                 final coaches = ref.watch(subscribedClients);
+                ref.refresh(subscribedClients);
                 return coaches.when(
                   data: (userModelList) => userModelList.isEmpty
                       ? Center(
@@ -77,6 +78,7 @@ class SubscriberClients extends StatelessWidget {
                                 delegate: SliverChildBuilderDelegate(
                                   (context, index) {
                                     final userModel = userModelList[index];
+
                                     return GestureDetector(
                                       onTap: () {
                                         // Navigator.push(
@@ -91,9 +93,9 @@ class SubscriberClients extends StatelessWidget {
                                           Container(
                                             height: 200,
                                             decoration: BoxDecoration(
-                                              image: const DecorationImage(
-                                                image: AssetImage(
-                                                    'assets/img.png'),
+                                              image: DecorationImage(
+                                                image: NetworkImage(
+                                                     userModel.photoUrl),
                                                 fit: BoxFit.cover,
                                               ),
                                               borderRadius:
@@ -119,10 +121,10 @@ class SubscriberClients extends StatelessWidget {
                                               ),
                                               child: Row(
                                                 children: [
-                                                  const CircleAvatar(
+                                                  CircleAvatar(
                                                     radius: 30,
-                                                    backgroundImage: AssetImage(
-                                                        'assets/img.png'),
+                                                    backgroundImage: NetworkImage(
+                                                        userModel.photoUrl),
                                                   ),
                                                   Text(
                                                     userModel.firstName,

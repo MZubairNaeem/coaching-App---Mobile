@@ -58,6 +58,7 @@ class SubscribedCoaches extends StatelessWidget {
               builder: (context, ref, _) {
                 // Getting coaches List
                 final coaches = ref.watch(subscribedCoaches);
+                ref.refresh(subscribedCoaches);
                 return coaches.when(
                   data: (userModelList) => userModelList.isEmpty
                       ? Center(
@@ -92,9 +93,9 @@ class SubscribedCoaches extends StatelessWidget {
                                           Container(
                                             height: 200,
                                             decoration: BoxDecoration(
-                                              image: const DecorationImage(
-                                                image: AssetImage(
-                                                    'assets/img.png'),
+                                              image: DecorationImage(
+                                                image: NetworkImage(
+                                                    userModel.photoUrl),
                                                 fit: BoxFit.cover,
                                               ),
                                               borderRadius:
@@ -120,10 +121,11 @@ class SubscribedCoaches extends StatelessWidget {
                                               ),
                                               child: Row(
                                                 children: [
-                                                  const CircleAvatar(
+                                                  CircleAvatar(
                                                     radius: 30,
-                                                    backgroundImage: AssetImage(
-                                                        'assets/img.png'),
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                            userModel.photoUrl),
                                                   ),
                                                   Text(
                                                     userModel.firstName,
