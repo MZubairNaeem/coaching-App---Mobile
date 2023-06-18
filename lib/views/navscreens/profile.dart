@@ -48,7 +48,7 @@ class _ProfileState extends State<Profile> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                          Text(
-                          user!.emailVerified.toString(),
+                          "Profile",
                           style: TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
