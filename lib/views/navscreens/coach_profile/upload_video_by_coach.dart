@@ -9,6 +9,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
@@ -25,7 +26,6 @@ class _UploadVideoState extends State<UploadVideo> {
   final description = TextEditingController();
   List<File> videosforupload = [];
   Uint8List? thumbnail;
-  bool _isLoading = false;
 
   Future<List<File>> pickFiles(BuildContext context) async {
     showDialog(
@@ -165,6 +165,32 @@ class _UploadVideoState extends State<UploadVideo> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
+                    "Description",
+                    style: TextStyle(
+                        color: AppColors().darKShadowColor, fontSize: 20),
+                  ),
+                ),
+                SizedBox(
+                  height: screenHeight * 0.01,
+                ),
+                TextField(
+                  controller: description,
+                  maxLines: 6,
+                  decoration: InputDecoration(
+                    hintText: 'What training are you doing',
+                    hintStyle: TextStyle(color: AppColors().darKShadowColor),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: screenHeight * 0.01,
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
                     "Upload Video",
                     style: TextStyle(
                         color: AppColors().darKShadowColor, fontSize: 20),
@@ -221,57 +247,35 @@ class _UploadVideoState extends State<UploadVideo> {
                   ),
                 ),
                 SizedBox(
-                  height: screenHeight * 0.01,
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Description",
-                    style: TextStyle(
-                        color: AppColors().darKShadowColor, fontSize: 20),
-                  ),
-                ),
-                SizedBox(
-                  height: screenHeight * 0.01,
-                ),
-                TextField(
-                  controller: description,
-                  maxLines: 6,
-                  decoration: InputDecoration(
-                    hintText: 'What training are you doing',
-                    hintStyle: TextStyle(color: AppColors().darKShadowColor),
-                    border: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-                SizedBox(
                   height: screenHeight * 0.1,
                 ),
-                _isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : LargeButton(
-                        name: "Upload",
-                        onPressed: () async {
-                          setState(() {
-                            _isLoading = true;
-                          });
-                          List<Video> downloadURLs =
-                              await uploadVideos(videosforupload);
+                LargeButton(
+                  name: "Upload",
+                  onPressed: () async {
+                    //CircularProgressIndicator();
+                    showDialog(
+                        context: context,
+                        builder: (context) => Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors().primaryColor,
+                              ),
+                            ));
 
-                          if (downloadURLs.length == videosforupload.length) {
-                            setState(() {
-                              _isLoading = false;
-                            });
-                            title.clear();
-                            description.clear();
-                            showSnackBar(context, "Upload complete");
-                          }
-                        },
-                      )
+                    List<Video> downloadURLs =
+                        await uploadVideos(videosforupload);
+
+                    if (downloadURLs.length == videosforupload.length) {
+                      title.clear();
+                      description.clear();
+                      setState(() {
+                        videosforupload = [];
+                        thumbnail = null;
+                      });
+                      Navigator.pop(context);
+                      showSnackBar(context, "Upload complete");
+                    }
+                  },
+                )
               ],
             ),
           ),

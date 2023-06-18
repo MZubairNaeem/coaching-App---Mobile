@@ -22,240 +22,243 @@ class _ClientNotificationState extends State<ClientNotification> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text(
-          "Notification",
-          style: TextStyle(color: AppColors().darKShadowColor),
+    return WillPopScope(
+      onWillPop: () async {
+        return await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(
+              "Alert",
+              style: TextStyle(
+                  color: AppColors().primaryColor,
+                  fontFamily: "Poppins",
+                  fontWeight: FontWeight.w600,
+                  fontSize: 22),
+            ),
+            content: Text("Are you sure you want to exit?"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(
+                  "Yes",
+                  style: TextStyle(color: AppColors().primaryColor),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(
+                  "No",
+                  style: TextStyle(color: AppColors().primaryColor),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Text(
+            "Notification",
+            style: TextStyle(color: AppColors().darKShadowColor),
+          ),
         ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(screenWidth * 0.1),
-        child: Stack(
-          children: [
-            Consumer(
-              builder: (context, ref, child) {
-                final notification = ref.watch(NotificationProvider);
-                ref.refresh(NotificationProvider);
-                return notification.when(
-                  data: (notification) {
-                    notification.isEmpty
+        body: Padding(
+          padding: EdgeInsets.all(screenWidth * 0.1),
+          child: Stack(
+            children: [
+              Consumer(
+                builder: (context, ref, child) {
+                  final notification = ref.watch(NotificationProvider);
+                  ref.refresh(NotificationProvider);
+
+                  return notification.when(
+                    data: (notification) => notification.isEmpty
                         ? Center(
                             child: Text(
-                              "No Notification",
-                              style: TextStyle(
-                                color: AppColors().darKShadowColor,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            "No Notification",
+                            style: TextStyle(
+                              color: AppColors().primaryColor,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                             ),
-                          )
-                        : Container();
-                    return ListView.builder(
-                      itemCount: notification.length,
-                      itemBuilder: (context, index) {
-                        DateTime? assignDateTime =
-                            notification[index].assignDate?.toDate();
-                        DateTime now = DateTime.now();
-                        String formattedTime =
-                            DateFormat.jm().format(assignDateTime!);
-                        String formattedDate =
-                            DateFormat.yMd().format(assignDateTime);
-                        DateTime? createdDateTime =
-                            notification[index].created_at?.toDate();
-                        String CreatedFormattedTime =
-                            DateFormat.jm().format(createdDateTime!);
-                        return Padding(
-                          padding: EdgeInsets.only(
-                              bottom: screenHeight * 0.02,
-                              left: screenWidth * 0.02,
-                              right: screenWidth * 0.02),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => PlayVideo(
-                                            videoIDs:
-                                                notification[index].videos!,
-                                          )));
-                            },
-                            child: Column(
-                              children: [
-                                //Show Today or Yesterday or date of the schedule using creadted_at
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          left: screenWidth * 0.09),
-                                      child: Text(
-                                        getDateFormat(notification[index]
-                                            .created_at!
-                                            .toDate()),
-                                        style: TextStyle(
-                                          color: AppColors().primaryColor,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: screenHeight * 0.01,
-                                ),
-                                Container(
-                                  height: screenHeight * 0.1,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: AppColors().primaryColor),
-                                    borderRadius: BorderRadius.circular(50.0),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          ))
+                        : ListView.builder(
+                            itemCount: notification.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                    bottom: screenHeight * 0.02,
+                                    left: screenWidth * 0.02,
+                                    right: screenWidth * 0.02),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => PlayVideo(
+                                                  videoIDs: notification[index]
+                                                      .videos!,
+                                                )));
+                                  },
+                                  child: Column(
                                     children: [
-                                      Padding(
-                                        padding:
-                                            EdgeInsets.all(screenWidth * 0.005),
-                                        child: Container(
-                                          height: screenHeight * 0.095,
-                                          width: screenWidth * 0.22,
-                                          decoration: BoxDecoration(
-                                            color: AppColors().lightShadowColor,
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                              topLeft: Radius.circular(50.0),
-                                              bottomLeft: Radius.circular(50.0),
+                                      //Show Today or Yesterday or date of the schedule using creadted_at
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: screenWidth * 0.09),
+                                            child: Text(
+                                              getDateFormat(notification[index]
+                                                  .created_at!
+                                                  .toDate()),
+                                              style: TextStyle(
+                                                color: AppColors().primaryColor,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           ),
-                                        ),
+                                        ],
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: screenWidth * 0.02),
-                                        child: Column(
+                                      SizedBox(
+                                        height: screenHeight * 0.01,
+                                      ),
+                                      Container(
+                                        height: screenHeight * 0.1,
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: AppColors().primaryColor),
+                                          borderRadius:
+                                              BorderRadius.circular(50.0),
+                                        ),
+                                        child: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            FutureBuilder<String>(
-                                              future: getSchuduleTitle(
-                                                  notification[index]
-                                                      .scheduleId!),
-                                              builder: (BuildContext context,
-                                                  AsyncSnapshot<String>
-                                                      snapshot) {
-                                                if (snapshot.hasData) {
-                                                  return Text(
-                                                    snapshot.data!,
-                                                    style: TextStyle(
-                                                      color: AppColors()
-                                                          .primaryColor,
-                                                      fontSize: 22,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  );
-                                                } else if (snapshot.hasError) {
-                                                  return const Text(
-                                                      'Error retrieving schedule title');
-                                                } else {
-                                                  return const Text(
-                                                      'Loading...');
-                                                }
-                                              },
-                                            ),
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.watch_later_outlined,
+                                            Padding(
+                                              padding: EdgeInsets.all(
+                                                  screenWidth * 0.005),
+                                              child: Container(
+                                                height: screenHeight * 0.095,
+                                                width: screenWidth * 0.22,
+                                                decoration: BoxDecoration(
                                                   color: AppColors()
                                                       .lightShadowColor,
-                                                ),
-                                                SizedBox(
-                                                  width: screenWidth * 0.01,
-                                                ),
-                                                //Show the date not time of the schedule
-                                                Text(
-                                                  (assignDateTime.year ==
-                                                              now.year &&
-                                                          assignDateTime
-                                                                  .month ==
-                                                              now.month &&
-                                                          assignDateTime.day ==
-                                                              now.day)
-                                                      ? formattedTime
-                                                      : formattedDate,
-                                                  style: TextStyle(
-                                                    color: AppColors()
-                                                        .darKShadowColor,
-                                                    fontSize: 12,
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(50.0),
+                                                    bottomLeft:
+                                                        Radius.circular(50.0),
                                                   ),
                                                 ),
-                                              ],
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  right: screenWidth * 0.1),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  FutureBuilder<String>(
+                                                    future: getSchuduleTitle(
+                                                        notification[index]
+                                                            .scheduleId!),
+                                                    builder: (BuildContext
+                                                            context,
+                                                        AsyncSnapshot<String>
+                                                            snapshot) {
+                                                      if (snapshot.hasData) {
+                                                        return Text(
+                                                          snapshot.data!,
+                                                          style: TextStyle(
+                                                            color: AppColors()
+                                                                .primaryColor,
+                                                            fontSize: 22,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        );
+                                                      } else if (snapshot
+                                                          .hasError) {
+                                                        return Text(
+                                                            'Error retrieving schedule title');
+                                                      } else {
+                                                        return Text(
+                                                            'Loading...');
+                                                      }
+                                                    },
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons
+                                                            .watch_later_outlined,
+                                                        color: AppColors()
+                                                            .lightShadowColor,
+                                                      ),
+                                                      SizedBox(
+                                                        width:
+                                                            screenWidth * 0.01,
+                                                      ),
+                                                      //Show the date not time of the schedule
+                                                      Text(
+                                                        notification[index]
+                                                            .assignDate!
+                                                            .toDate()
+                                                            .toString(),
+                                                        style: TextStyle(
+                                                          color: AppColors()
+                                                              .darKShadowColor,
+                                                          fontSize: 8,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                      Center(
-                                        child: Container(
-                                          margin: EdgeInsets.only(
-                                              right: screenWidth * 0.08),
-                                          height: screenWidth * 0.08,
-                                          width: screenWidth * 0.08,
-                                          decoration: BoxDecoration(
-                                            color: AppColors().primaryColor,
-                                            borderRadius: BorderRadius.circular(
-                                                screenWidth * 0.1),
-                                          ),
-                                          child: Center(
-                                            child: Icon(
-                                              Icons.notifications,
-                                              color: Colors.white,
-                                              size: screenWidth * 0.05,
-                                            ),
+                                      SizedBox(
+                                        height: screenHeight * 0.01,
+                                      ),
+                                      //Time of the schedule
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          "${notification[index].created_at!.toDate().hour}:${notification[index].created_at!.toDate().minute} ${notification[index].created_at!.toDate().hour > 12 ? "PM" : "AM"}",
+                                          style: TextStyle(
+                                            color: AppColors().darKShadowColor,
+                                            fontSize: 8,
                                           ),
                                         ),
-                                      ),
+                                      )
                                     ],
                                   ),
                                 ),
-                                SizedBox(
-                                  height: screenHeight * 0.01,
-                                ),
-                                //Time of the schedule
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      right: screenWidth * 0.02),
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                      CreatedFormattedTime,
-                                      style: TextStyle(
-                                        color: AppColors().darKShadowColor,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    );
-                  },
-                  loading: () => const Text("..."),
-                  error: (error, stackTrace) => Text('Error: $error'),
-                );
-                //ref.refresh(notification);
-              },
-            ),
-          ],
+                    loading: () => const Text("..."),
+                    error: (error, stackTrace) => Text('Errors: $error'),
+                  );
+                  //ref.refresh(notification);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
