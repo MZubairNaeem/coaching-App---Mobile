@@ -10,9 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../widgets/large_button_trasparent.dart';
+import '../../models/coach_app_sub.dart';
 import '../../models/user.dart';
 import '../../providers/firebase_helper.dart';
 import '../client_home.dart';
+import '../subscription/coach_app_subscription/coach_app_sub.dart';
 import 'forget_pass.dart';
 
 class Login extends StatefulWidget {
@@ -48,6 +50,16 @@ class _LoginState extends State<Login> {
     return user;
   }
 
+  CoachAppSubModel? coachAppSubModel;
+  Future<CoachAppSubModel> getCoachAppSubData() async {
+    CoachAppSubModel coachAppSub = await FirebaseHelper.getCoachSubModelById(
+        FirebaseAuth.instance.currentUser!.uid);
+    setState(() {
+      coachAppSubModel = coachAppSub;
+    });
+    return coachAppSub;
+  }
+
   Future<void> _signinUser() async {
     setState(() {
       _isLoading = true;
@@ -63,11 +75,19 @@ class _LoginState extends State<Login> {
       if (userr.emailVerified) {
         UserModel userData =
             await FirebaseHelper.getUserModelById(user.user!.uid);
+        CoachAppSubModel coachAppSubData =
+            await FirebaseHelper.getCoachSubModelById(user.user!.uid);
         print(userData.userType);
         if (userData.userType == 'coachKey' && _key == 'coachKey') {
-          // ignore: use_build_context_synchronously
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const CoachHome()));
+          if (coachAppSubData.status == "active") {
+            // ignore: use_build_context_synchronously
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const CoachHome()));
+          } else {
+            // ignore: use_build_context_synchronously
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const CoachAppSub()));
+          }
         } else if (userData.userType == 'clientKey' && _key == 'clientKey') {
           // ignore: use_build_context_synchronously
           Navigator.pushReplacement(context,

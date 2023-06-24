@@ -1,10 +1,13 @@
 import 'package:coachingapp/views/navscreens/coach_profile/upload_video_by_coach.dart';
+import 'package:coachingapp/views/subscription/coach_app_subscription/coach_app_sub.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../models/coach_app_sub.dart';
 import '../../../models/videos.dart';
+import '../../../providers/firebase_helper.dart';
 import '../../../providers/get_demoVideos.dart';
 import '../../../providers/get_user_type.dart';
 import '../../../utils/colors.dart';
@@ -18,6 +21,33 @@ class CoachProfilePreview extends StatefulWidget {
 }
 
 class _CoachProfilePreviewState extends State<CoachProfilePreview> {
+  CoachAppSubModel? coachAppSubData;
+  @override
+  void initState() {
+    getStarted();
+    super.initState();
+  }
+
+  CoachAppSubModel? coachAppSubModel;
+  Future<CoachAppSubModel> getCoachAppSubData(String uid) async {
+    CoachAppSubModel coachAppSub =
+        await FirebaseHelper.getCoachSubModelById(uid);
+    setState(() {
+      coachAppSubModel = coachAppSub;
+    });
+    return coachAppSub;
+  }
+
+  Future<void> getStarted() async {
+    coachAppSubData =
+        await getCoachAppSubData(FirebaseAuth.instance.currentUser!.uid);
+    if (coachAppSubData!.status != "active") {
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const CoachAppSub()));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final demoVideosProvider = StreamProvider<List<Video>>(

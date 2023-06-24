@@ -20,7 +20,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   //  final FirebaseAuth _auth = FirebaseAuth.instance;
   // User? userr = _auth.currentUser;
-  User? user =  FirebaseAuth.instance.currentUser;
+  User? user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -47,7 +47,7 @@ class _ProfileState extends State<Profile> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                         Text(
+                        const Text(
                           "Profile",
                           style: TextStyle(
                               fontSize: 28,

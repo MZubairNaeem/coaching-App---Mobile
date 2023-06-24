@@ -4,6 +4,7 @@ import 'package:coachingapp/utils/strings.dart';
 import 'package:coachingapp/views/auth/login.dart';
 import 'package:coachingapp/views/coach_home.dart';
 import 'package:coachingapp/views/client_home.dart';
+import 'package:coachingapp/views/subscription/coach_app_subscription/coach_app_sub.dart';
 import 'package:coachingapp/widgets/large_button_blue.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:uuid/uuid.dart';
 import 'firebase_options.dart';
+import 'models/coach_app_sub.dart';
 import 'models/user.dart';
 
 var uuid = const Uuid();
@@ -41,12 +43,12 @@ class _MyAppState extends State<MyApp> {
   final providerContainer = ProviderContainer();
   String? finalKey;
   bool? isVerified;
+  CoachAppSubModel? coachAppSubData;
   @override
   void initState() {
     super.initState();
     getValidationKey();
     if (FirebaseAuth.instance.currentUser?.emailVerified == true) {
-      print("false");
       setState(() {
         isVerified = true;
       });
@@ -74,6 +76,21 @@ class _MyAppState extends State<MyApp> {
     return user;
   }
 
+  CoachAppSubModel? coachAppSubModel;
+  Future<CoachAppSubModel> getCoachAppSubData(String uid) async {
+    CoachAppSubModel coachAppSub =
+        await FirebaseHelper.getCoachSubModelById(uid);
+    setState(() {
+      coachAppSubModel = coachAppSub;
+    });
+    return coachAppSub;
+  }
+
+  Future<void> getStarted() async {
+    coachAppSubData =
+        await getCoachAppSubData(FirebaseAuth.instance.currentUser!.uid);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Sizer(
@@ -91,8 +108,8 @@ class _MyAppState extends State<MyApp> {
                     if (finalKey == 'client' && isVerified == true) {
                       return const ClientHome();
                     } else if (finalKey == 'coach' && isVerified == true) {
+                      print("CoachHome");
                       return const CoachHome();
-                      // ignore: unnecessary_null_comparison
                     } else if (finalKey == null) {
                       return const WelcomeScreen();
                     }
