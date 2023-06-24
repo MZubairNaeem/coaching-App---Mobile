@@ -1,8 +1,11 @@
 import 'package:coachingapp/utils/colors.dart';
 import 'package:coachingapp/widgets/large_button_blue.dart';
 import 'package:coachingapp/widgets/snackbar.dart';
+import 'package:country_pickers/countries.dart';
+import 'package:country_pickers/country.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../viewmodels/auth.dart';
 import 'login.dart';
@@ -20,7 +23,32 @@ class _ClientSignupState extends State<ClientSignup> {
   int testYear = 1980;
   int testMonth = 0;
   int testDay = 0;
+  List<String> item =
+      countryList.map((Country country) => country.name).toList();
+  @override
+  void initState() {
+    item.sort();
+    super.initState();
+  }
 
+  // List<String> item = [
+  //   'IBH-120',
+  //   'ND',
+  //   'IBD(KILLED)',
+  //   'IBD(INTERMEDIATE)',
+  //   'IBD (PLUS)',
+  //   'H5',
+  //   'ND Lasota',
+  //   'Fowl Pox',
+  //   'IB variant',
+  //   'Live Freeze dried',
+  //   'Immune complex',
+  //   'Chicken infectious Anaemia',
+  //   'EDS',
+  //   'Hydro',
+  //   'H9',
+  //   'ND live'
+  // ];
   bool _isLoading = false;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -74,6 +102,8 @@ class _ClientSignupState extends State<ClientSignup> {
 
   @override
   Widget build(BuildContext context) {
+    String? dropdownValue;
+
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
@@ -340,92 +370,77 @@ class _ClientSignupState extends State<ClientSignup> {
                                     elevation: 3.0,
                                     shadowColor: AppColors().lightShadowColor,
                                     borderRadius: BorderRadius.circular(50.0),
-                                    child: TextFormField(
-                                      controller: _locationController,
-                                      decoration: InputDecoration(
-                                          suffixIcon: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 10.0),
-                                            child: Icon(
-                                              Icons.location_on,
-                                              color:
-                                                  AppColors().darKShadowColor,
-                                            ),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: screenWidth * 0.025),
+                                      child: DropdownButtonHideUnderline(
+                                        child: DropdownButton(
+                                          icon: Icon(
+                                            Icons.location_on,
+                                            color: AppColors().darKShadowColor,
                                           ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50.0),
-                                            borderSide: BorderSide(
-                                                width: 1,
-                                                color: AppColors()
-                                                    .lightShadowColor), //<-- SEE HERE
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50.0),
-                                            borderSide: BorderSide(
-                                                width: 2,
-                                                color: AppColors()
-                                                    .primaryColor), //<-- SEE HERE
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50.0),
-                                            borderSide: BorderSide(
-                                                width: 1,
-                                                color: AppColors()
-                                                    .lightShadowColor),
-                                          ),
-                                          hintText: 'City',
-                                          hintStyle: const TextStyle(
-                                              color: Colors.grey)),
+                                          hint: Text('Select Location'),
+                                          items: item
+                                              .map((e) => DropdownMenuItem(
+                                                    value: e,
+                                                    child: Text(e),
+                                                  ))
+                                              .toList(),
+                                          onChanged: (val) {
+                                            setState(() {
+                                              dropdownValue = val as String;
+                                              _locationController.text =
+                                                  dropdownValue!;
+                                              print(val.toString());
+                                            });
+                                          },
+                                          value: _locationController.text,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  Material(
-                                    elevation: 3.0,
-                                    shadowColor: AppColors().lightShadowColor,
-                                    borderRadius: BorderRadius.circular(50.0),
-                                    child: TextFormField(
-                                      controller: _phoneNumberController,
-                                      keyboardType: TextInputType.number,
-                                      decoration: InputDecoration(
-                                          suffixIcon: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 10.0),
-                                            child: Icon(
-                                              Icons.phone,
-                                              color:
-                                                  AppColors().darKShadowColor,
-                                            ),
+                                  IntlPhoneField(
+                                    controller: _phoneNumberController,
+                                    decoration: InputDecoration(
+                                        suffixIcon: Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 10.0),
+                                          child: Icon(
+                                            Icons.phone_rounded,
+                                            color:
+                                                AppColors().darKShadowColor,
                                           ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50.0),
-                                            borderSide: BorderSide(
-                                                width: 2,
-                                                color: AppColors()
-                                                    .primaryColor), //<-- SEE HERE
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50.0),
-                                            borderSide: BorderSide(
-                                                width: 1,
-                                                color: AppColors()
-                                                    .lightShadowColor), //<-- SEE HERE
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50.0),
-                                            borderSide: BorderSide(
-                                                width: 1,
-                                                color: AppColors()
-                                                    .lightShadowColor),
-                                          ),
-                                          hintText: '(+62) 812 0101 0101',
-                                          hintStyle: const TextStyle(
-                                              color: Colors.grey)),
-                                    ),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(50.0),
+                                          borderSide: BorderSide(
+                                              width: 1,
+                                              color: AppColors()
+                                                  .lightShadowColor), //<-- SEE HERE
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(50.0),
+                                          borderSide: BorderSide(
+                                              width: 2,
+                                              color: AppColors()
+                                                  .primaryColor), //<-- SEE HERE
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(50.0),
+                                          borderSide: BorderSide(
+                                              width: 1,
+                                              color: AppColors()
+                                                  .lightShadowColor),
+                                        ),
+                                        hintText: 'Phone Number',
+                                        hintStyle: const TextStyle(
+                                            color: Colors.grey)),
+                                    onChanged: (phone) {
+                                      print(phone.completeNumber);
+                                    },
                                   ),
                                   Material(
                                     elevation: 3.0,
