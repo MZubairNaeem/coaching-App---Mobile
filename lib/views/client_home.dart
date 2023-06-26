@@ -39,7 +39,36 @@ class _HomeClientState extends State<ClientHome> {
 
     return WillPopScope(
       onWillPop: () async {
-        return false;
+        return await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(
+              "Alert",
+              style: TextStyle(
+                  color: AppColors().primaryColor,
+                  fontFamily: "Poppins",
+                  fontWeight: FontWeight.w600,
+                  fontSize: 22),
+            ),
+            content: Text("Are you sure you want to exit?"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(
+                  "Yes",
+                  style: TextStyle(color: AppColors().primaryColor),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(
+                  "No",
+                  style: TextStyle(color: AppColors().primaryColor),
+                ),
+              ),
+            ],
+          ),
+        );
       },
       child: Scaffold(
         body: PageStorage(bucket: bucket, child: currentScreen),

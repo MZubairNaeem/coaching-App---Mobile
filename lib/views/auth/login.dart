@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coachingapp/utils/colors.dart';
-import 'package:coachingapp/viewmodels/auth.dart';
 import 'package:coachingapp/views/auth/signup.dart';
 import 'package:coachingapp/views/coach_home.dart';
 import 'package:coachingapp/widgets/large_button_blue.dart';
@@ -72,13 +71,14 @@ class _LoginState extends State<Login> {
       User? userr = auth.currentUser;
 
       print(userr!.emailVerified);
+      print("email verified");
       if (userr.emailVerified) {
         UserModel userData =
             await FirebaseHelper.getUserModelById(user.user!.uid);
-        CoachAppSubModel coachAppSubData =
-            await FirebaseHelper.getCoachSubModelById(user.user!.uid);
         print(userData.userType);
         if (userData.userType == 'coachKey' && _key == 'coachKey') {
+          CoachAppSubModel coachAppSubData =
+              await FirebaseHelper.getCoachSubModelById(user.user!.uid);
           if (coachAppSubData.status == "active") {
             // ignore: use_build_context_synchronously
             Navigator.pushReplacement(context,
@@ -396,10 +396,10 @@ class _LoginState extends State<Login> {
                                     ),
                                   ],
                                 ),
-                                LargeButtonTransparent(
-                                  name: "Continue With Phone",
-                                  onPressed: () {},
-                                ),
+                                // LargeButtonTransparent(
+                                //   name: "Continue With Phone",
+                                //   onPressed: () {},
+                                // ),
                                 LargeButtonTransparent(
                                   name: _key == 'coachKey'
                                       ? 'Continue as Client'

@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../utils/colors.dart';
 import '../auth/login.dart';
-import 'coach_profile/coach_profile_preview.dart';
 import 'myaccount.dart';
 
 class Profile extends StatefulWidget {
@@ -176,11 +175,7 @@ class _ProfileState extends State<Profile> {
                           LargeButtonTransparentLeftAlignText(
                             name: "Help Center",
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const CoachProfilePreview()));
+                             
                             },
                           ),
                           LargeButtonTransparentLeftAlignText(

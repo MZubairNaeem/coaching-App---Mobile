@@ -1,6 +1,8 @@
+import '../main.dart';
 
 class CoachSubPlanModel {
   String? coachId;
+  String? subscriptionId;
   String? subscriptionType;
   String? timeline;
   int? price;
@@ -8,6 +10,7 @@ class CoachSubPlanModel {
 
   CoachSubPlanModel({
     this.coachId,
+    this.subscriptionId,
     this.subscriptionType,
     this.timeline,
     this.price,
@@ -16,6 +19,7 @@ class CoachSubPlanModel {
 
   CoachSubPlanModel.fromMap(Map<String, dynamic> map) {
     coachId = map['coachId'];
+    subscriptionId = map['subscriptionId'];
     subscriptionType = map['subscriptionType'];
     timeline = map['timeline'];
     price = map['price'];
@@ -24,6 +28,7 @@ class CoachSubPlanModel {
   Map<String, dynamic> toMap() {
     return {
       'coachId': coachId,
+      'subscriptionId': subscriptionId,
       'subscriptionType': subscriptionType,
       'timeline': timeline,
       'price': price,

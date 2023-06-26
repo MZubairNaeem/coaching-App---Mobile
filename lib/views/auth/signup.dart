@@ -31,24 +31,6 @@ class _ClientSignupState extends State<ClientSignup> {
     super.initState();
   }
 
-  // List<String> item = [
-  //   'IBH-120',
-  //   'ND',
-  //   'IBD(KILLED)',
-  //   'IBD(INTERMEDIATE)',
-  //   'IBD (PLUS)',
-  //   'H5',
-  //   'ND Lasota',
-  //   'Fowl Pox',
-  //   'IB variant',
-  //   'Live Freeze dried',
-  //   'Immune complex',
-  //   'Chicken infectious Anaemia',
-  //   'EDS',
-  //   'Hydro',
-  //   'H9',
-  //   'ND live'
-  // ];
   bool _isLoading = false;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -100,10 +82,10 @@ class _ClientSignupState extends State<ClientSignup> {
     });
   }
 
+  String? dropdownValue;
+
   @override
   Widget build(BuildContext context) {
-    String? dropdownValue;
-
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
@@ -389,12 +371,12 @@ class _ClientSignupState extends State<ClientSignup> {
                                           onChanged: (val) {
                                             setState(() {
                                               dropdownValue = val as String;
-                                              _locationController.text =
-                                                  dropdownValue!;
-                                              print(val.toString());
+                                            _locationController.text =
+                                                dropdownValue!;
+                                            print(val.toString());
                                             });
                                           },
-                                          value: _locationController.text,
+                                          value: dropdownValue,
                                         ),
                                       ),
                                     ),
@@ -407,8 +389,7 @@ class _ClientSignupState extends State<ClientSignup> {
                                               right: 10.0),
                                           child: Icon(
                                             Icons.phone_rounded,
-                                            color:
-                                                AppColors().darKShadowColor,
+                                            color: AppColors().darKShadowColor,
                                           ),
                                         ),
                                         enabledBorder: OutlineInputBorder(
@@ -432,8 +413,8 @@ class _ClientSignupState extends State<ClientSignup> {
                                               BorderRadius.circular(50.0),
                                           borderSide: BorderSide(
                                               width: 1,
-                                              color: AppColors()
-                                                  .lightShadowColor),
+                                              color:
+                                                  AppColors().lightShadowColor),
                                         ),
                                         hintText: 'Phone Number',
                                         hintStyle: const TextStyle(

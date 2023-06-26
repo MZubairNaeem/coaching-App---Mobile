@@ -32,9 +32,7 @@ class _CoachProfilePreviewState extends State<CoachProfilePreview> {
   Future<CoachAppSubModel> getCoachAppSubData(String uid) async {
     CoachAppSubModel coachAppSub =
         await FirebaseHelper.getCoachSubModelById(uid);
-    setState(() {
       coachAppSubModel = coachAppSub;
-    });
     return coachAppSub;
   }
 

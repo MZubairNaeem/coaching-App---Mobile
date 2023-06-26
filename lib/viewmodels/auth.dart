@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:coachingapp/views/subscription/coach_app_subscription/coach_app_sub.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -45,19 +44,22 @@ class Auth extends ChangeNotifier {
           userType: userType,
           photoUrl: photoUrl,
         );
-        CoachAppSubModel coachAppSub = CoachAppSubModel(
-          coachId: cred.user!.uid,
-          subscriptionType: "null",
-          startDate: Timestamp.now(),
-          endDate: Timestamp.now(),
-          noOfClients: 0,
-          status: "Pending",
-        );
+        if (userType == "coachType") {
+          CoachAppSubModel coachAppSub = CoachAppSubModel(
+            coachId: cred.user!.uid,
+            subscriptionType: "null",
+            startDate: Timestamp.now(),
+            endDate: Timestamp.now(),
+            noOfClients: 0,
+            status: "Pending",
+          );
+          await _firestore.collection('CoachAppSub').doc(cred.user!.uid).set(
+                coachAppSub.toMap(),
+              );
+        }
+
         await _firestore.collection('Users').doc(cred.user!.uid).set(
               user.toJson(),
-            );
-        await _firestore.collection('CoachAppSub').doc(cred.user!.uid).set(
-              coachAppSub.toMap(),
             );
         res = "Success";
       }
