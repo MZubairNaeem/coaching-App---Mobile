@@ -99,21 +99,21 @@ class _CoachFindState extends State<CoachFind> {
                 data: (userModelList) {
                   return CustomScrollView(
                     slivers: [
-                      SliverAppBar(
-                        floating: true,
-                        pinned: false,
-                        backgroundColor: Colors.transparent,
-                        title: TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Search',
-                            prefixIcon: const Icon(Icons.search),
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                      ),
+                      // SliverAppBar(
+                      //   floating: true,
+                      //   pinned: false,
+                      //   backgroundColor: Colors.transparent,
+                      //   title: TextField(
+                      //     decoration: InputDecoration(
+                      //       hintText: 'Search',
+                      //       prefixIcon: const Icon(Icons.search),
+                      //       border: OutlineInputBorder(
+                      //         borderSide: const BorderSide(color: Colors.grey),
+                      //         borderRadius: BorderRadius.circular(10),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       SliverPadding(
                         padding: const EdgeInsets.all(10),
                         sliver: SliverGrid(

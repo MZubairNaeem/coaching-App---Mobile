@@ -1,12 +1,21 @@
+import 'dart:typed_data';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coachingapp/models/user.dart';
 import 'package:coachingapp/viewmodels/auth.dart';
+import 'package:coachingapp/views/navscreens/chat/chat_list.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:image_picker/image_picker.dart';
 import '../models/videos.dart';
+import '../providers/coach_followers.dart';
 import '../providers/get_demoVideos.dart';
+import '../providers/get_user_type.dart';
 import '../utils/colors.dart';
+import '../viewmodels/storage_method.dart';
 import '../widgets/demo_video_player.dart';
+import '../widgets/image_picker.dart';
+import '../widgets/snackbar.dart';
 
 class PublicProfile extends StatefulWidget {
   final UserModel userModel;
@@ -17,7 +26,51 @@ class PublicProfile extends StatefulWidget {
 }
 
 class _PublicProfileState extends State<PublicProfile> {
-  @override
+  final user = FirebaseAuth.instance.currentUser?.uid;
+  final title = TextEditingController();
+  final experience = TextEditingController();
+  final projects = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  Uint8List? _image;
+  bool load = false;
+  void selectImage() async {
+    try {
+      setState(() {
+        load = true;
+      });
+      Uint8List im = await pickImage(ImageSource.gallery);
+      setState(() {
+        _image = im;
+      });
+      setState(() {
+        load = false;
+      });
+    } catch (e) {
+      showSnackBar(context, "error");
+    }
+  }
+
+  void upload(image) async {
+    try {
+      setState(() {
+        load = true;
+      });
+      String photoUrl =
+          await StorageMethod().uploadImageToStorage('profilePic', image);
+      FirebaseFirestore.instance
+          .collection("Users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({'photoUrl': photoUrl});
+      print(photoUrl);
+      setState(() {
+        load = false;
+      });
+      showSnackBar(context, "Profile Updated");
+    } catch (e) {
+      showSnackBar(context, "error");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,55 +92,252 @@ class _PublicProfileState extends State<PublicProfile> {
           padding: EdgeInsets.all(screenWidth * 0.05),
           child: Column(
             children: [
-              Padding(
-                padding: EdgeInsets.only(
-                    top: screenHeight * 0.02, bottom: screenHeight * 0.02),
-                child: CircleAvatar(
-                  radius: screenWidth * 0.15,
-                  backgroundColor: AppColors().primaryColor,
-                  child: CircleAvatar(
-                    radius: screenWidth * 0.145,
-                    backgroundImage: NetworkImage(widget.userModel.photoUrl),
-                    child: Align(
-                      alignment: Alignment.bottomRight,
+              user != widget.userModel.uid
+                  ? Padding(
+                      padding: EdgeInsets.only(
+                          top: screenHeight * 0.02,
+                          bottom: screenHeight * 0.02),
                       child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 12.0,
-                        child: Consumer(
-                          builder: (context, ref, __) {
-                            final subscriptionStatus =
-                                ref.watch(subscriptionProvider);
+                        radius: screenWidth * 0.15,
+                        backgroundColor: AppColors().primaryColor,
+                        child: CircleAvatar(
+                          radius: screenWidth * 0.145,
+                          backgroundImage:
+                              NetworkImage(widget.userModel.photoUrl),
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: 12.0,
+                              child: Consumer(
+                                builder: (context, ref, __) {
+                                  final subscriptionStatus =
+                                      ref.watch(subscriptionProvider);
 
-                            return subscriptionStatus.maybeWhen(
-                              data: (subscribed) => subscribed
-                                  ? const Icon(Icons.check)
-                                  : GestureDetector(
-                                      onTap: () {
-                                        Auth().Subscirbe(widget.userModel.uid);
-                                        ref.refresh(subscriptionProvider);
-                                      },
-                                      child: const Icon(Icons.add),
-                                    ),
-                              orElse: () => const CircularProgressIndicator(),
-                            );
-                          },
+                                  return subscriptionStatus.maybeWhen(
+                                    data: (subscribed) => subscribed
+                                        ? const Icon(Icons.check)
+                                        : GestureDetector(
+                                            onTap: () {
+                                              Auth().Subscirbe(
+                                                  widget.userModel.uid);
+                                              ref.refresh(subscriptionProvider);
+                                            },
+                                            child: const Icon(Icons.add),
+                                          ),
+                                    orElse: () =>
+                                        const CircularProgressIndicator(),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
                         ),
                       ),
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(
+                          bottom: 8.0, top: screenHeight * 0.04),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: SizedBox(
+                              child: CircleAvatar(
+                                radius: screenWidth * 0.15,
+                                backgroundColor: AppColors().primaryColor,
+                                child: _image != null
+                                    ? CircleAvatar(
+                                        radius: screenWidth * 0.14,
+                                        backgroundImage: MemoryImage(_image!),
+                                      )
+                                    : Consumer(
+                                        builder: (context, ref, _) {
+                                          final userResult =
+                                              ref.read(userProvider);
+                                          return userResult.when(
+                                            data: (userModel) {
+                                              return CircleAvatar(
+                                                radius: screenWidth * 0.14,
+                                                backgroundImage: NetworkImage(
+                                                    userModel.photoUrl),
+                                              );
+                                            },
+                                            loading: () => const Text("..."),
+                                            error: (error, stackTrace) =>
+                                                Text('Error: $error'),
+                                          );
+                                        },
+                                      ),
+                              ),
+                            ),
+                          ),
+                          _image != null
+                              ? load
+                                  ? Center(
+                                      child: CircularProgressIndicator(
+                                      color: AppColors().primaryColor,
+                                    ))
+                                  : TextButton(
+                                      onPressed: () => upload(_image),
+                                      child: Text(
+                                        "Tap to Upload",
+                                        style: TextStyle(
+                                            color: AppColors().primaryColor,
+                                            fontSize: 16),
+                                      ))
+                              : TextButton(
+                                  onPressed: () => selectImage(),
+                                  child: Text(
+                                    "Tap to Choose",
+                                    style: TextStyle(
+                                        color: AppColors().primaryColor,
+                                        fontSize: 16),
+                                  ),
+                                )
+                        ],
+                      ),
                     ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    widget.userModel.firstName,
+                    style: const TextStyle(
+                        fontSize: 28, fontWeight: FontWeight.bold),
                   ),
-                ),
+                  if (user == widget.userModel.uid)
+                    IconButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Form(
+                              key: _formKey,
+                              child: AlertDialog(
+                                title: const Text('Add Subscription Details'),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    TextFormField(
+                                      controller: title,
+                                      keyboardType: TextInputType.name,
+                                      decoration: const InputDecoration(
+                                          labelText: 'Title'),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter experience';
+                                        }
+                                        final letters = value.replaceAll(
+                                            RegExp(r'[^a-zA-Z]'),
+                                            ''); // Remove non-letter characters
+                                        if (letters.length > 30) {
+                                          return 'Please enter up to 30 letters';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    TextFormField(
+                                      controller: experience,
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText: 'Experiene in years'),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter experience';
+                                        }
+                                        final number = int.tryParse(value);
+                                        if (number == null) {
+                                          return 'Please enter a valid number';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    TextFormField(
+                                      controller: projects,
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText: 'Projects Count'),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter a Projects Count';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    const SizedBox(
+                                      height: 10.0,
+                                    ),
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              AppColors().primaryColor),
+                                      foregroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.white),
+                                    ),
+                                    onPressed: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        _formKey.currentState!.save();
+                                        updateUserData(title.text,
+                                            experience.text, projects.text);
+                                        Navigator.pop(context);
+                                      }
+                                      showSnackBar(
+                                          context, "Field can't be empty");
+                                      // Close the dialog
+                                    },
+                                    child: const Text('Update'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      icon: Icon(
+                        Icons.edit,
+                        color: AppColors().primaryColor,
+                      ),
+                    )
+                  else
+                    Container(),
+                ],
               ),
-              Text(
-                widget.userModel.firstName,
-                style:
-                    const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                "Professional Fitness Trainer",
-                style: TextStyle(fontSize: 16, color: AppColors().primaryColor),
-              ),
+              user == widget.userModel.uid
+                  ? Consumer(builder: (context, ref, _) {
+                      final userResult = ref.read(userProvider);
+                      return userResult.when(
+                        data: (userModel) {
+                          return Text(
+                            userModel.title!,
+                            style: TextStyle(
+                                fontSize: 16, color: AppColors().primaryColor),
+                          );
+                        },
+                        loading: () => const Text("..."),
+                        error: (error, stackTrace) => Text('Error: $error'),
+                      );
+                    })
+                  : Text(
+                      widget.userModel.title!,
+                      style: TextStyle(
+                          fontSize: 16, color: AppColors().primaryColor),
+                    ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ChatList(),
+                    ),
+                  );
+                },
                 child: Container(
                   margin: EdgeInsets.symmetric(
                       vertical: screenHeight * 0.01,
@@ -105,38 +355,93 @@ class _PublicProfileState extends State<PublicProfile> {
                   ),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Column(
-                      children: [
-                        Text("Followers"),
-                        Text(
-                          "2541",
-                          style: TextStyle(fontSize: 28),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text("Experince"),
-                        Text(
-                          "1 year +",
-                          style: TextStyle(fontSize: 28),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text("Projects"),
-                        Text(
-                          "241",
-                          style: TextStyle(fontSize: 28),
-                        ),
-                      ],
-                    ),
+                    Consumer(builder: (context, ref, _) {
+                      final userResult = ref.read(userProvider);
+                      final followers = ref
+                          .watch(
+                              getCoachFollowersProvider(widget.userModel.uid))
+                          .value;
+                      return userResult.when(
+                        data: (userModel) {
+                          return Column(
+                            children: [
+                              Text("Followers"),
+                              Text(
+                                followers.toString(),
+                                style: TextStyle(fontSize: 28),
+                              ),
+                            ],
+                          );
+                        },
+                        loading: () => const Text("..."),
+                        error: (error, stackTrace) => Text('Error: $error'),
+                      );
+                    }),
+                    user != widget.userModel.uid
+                        ? Consumer(builder: (context, ref, _) {
+                            final userResult = ref.read(userProvider);
+                            ref.refresh(userProvider);
+                            return userResult.when(
+                              data: (userModel) {
+                                return Column(
+                                  children: [
+                                    Text("Experince"),
+                                    Text(
+                                      userModel.experience.toString(),
+                                      style: TextStyle(fontSize: 28),
+                                    ),
+                                  ],
+                                );
+                              },
+                              loading: () => const Text("..."),
+                              error: (error, stackTrace) =>
+                                  Text('Error: $error'),
+                            );
+                          })
+                        : Column(
+                            children: [
+                              Text("Experince"),
+                              Text(
+                                widget.userModel.experience.toString(),
+                                style: TextStyle(fontSize: 28),
+                              ),
+                            ],
+                          ),
+                    user == widget.userModel.uid
+                        ? Consumer(builder: (context, ref, _) {
+                            final userResult = ref.read(userProvider);
+                            ref.refresh(userProvider);
+                            return userResult.when(
+                              data: (userModel) {
+                                return Column(
+                                  children: [
+                                    Text("Projects"),
+                                    Text(
+                                      userModel.projects.toString(),
+                                      style: TextStyle(fontSize: 28),
+                                    ),
+                                  ],
+                                );
+                              },
+                              loading: () => const Text("..."),
+                              error: (error, stackTrace) =>
+                                  Text('Error: $error'),
+                            );
+                          })
+                        : Column(
+                            children: [
+                              Text("Projects"),
+                              Text(
+                                widget.userModel.projects.toString(),
+                                style: TextStyle(fontSize: 28),
+                              ),
+                            ],
+                          ),
                   ],
                 ),
               ),
@@ -204,5 +509,20 @@ class _PublicProfileState extends State<PublicProfile> {
         ),
       ),
     ));
+  }
+
+  Future<void> updateUserData(
+      String title, String experience, String projects) async {
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    try {
+      await FirebaseFirestore.instance.collection('Users').doc(userId).update({
+        'title': title,
+        'experience': experience,
+        'projects': projects,
+      });
+      showSnackBar(context, "User Data Updated Successfully");
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
   }
 }

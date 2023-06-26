@@ -1,13 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:coachingapp/models/coach_app_sub.dart';
 import 'package:coachingapp/providers/get_coach_own_schedule.dart';
 import 'package:coachingapp/viewmodels/add_plan_by_coach.dart';
 import 'package:coachingapp/widgets/snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../providers/get_user_type.dart';
 import '../../../utils/colors.dart';
 import '../../../widgets/custom_background.dart';
 

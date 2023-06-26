@@ -27,5 +27,9 @@ final userProvider = FutureProvider<UserModel>((ref) async {
     email: data['email'],
     userType: data['userType'],
     photoUrl: data['photoUrl'],
+    title: data['title'],
+    experience: data['experience'],
+    projects: data['projects'],
+    
   );
 });

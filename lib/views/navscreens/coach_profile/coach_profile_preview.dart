@@ -1,7 +1,6 @@
 import 'package:coachingapp/views/navscreens/coach_profile/upload_video_by_coach.dart';
 import 'package:coachingapp/views/subscription/coach_app_subscription/coach_app_sub.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
