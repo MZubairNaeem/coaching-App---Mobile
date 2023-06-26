@@ -16,37 +16,34 @@ class SubscribedCoaches extends StatelessWidget {
         ClipPath(
           clipper: CustomClipperPath(),
           child: Container(
-              padding:
-                  const EdgeInsets.only(top: 50.0, left: 15.0, right: 15.0),
+              padding: const EdgeInsets.only(left: 15.0, right: 15.0),
               decoration: BoxDecoration(
                 color: AppColors().primaryColor,
               ),
               height: MediaQuery.of(context).size.height * 0.4,
               width: MediaQuery.of(context).size.width,
-              child: const Align(
-                alignment: Alignment.topCenter,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Subscribed Coaches",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Here are your subscribed coaches",
-                      style: TextStyle(
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Subscribed Coaches",
+                    style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18,
-                      ),
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Here are your subscribed coaches",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               )),
         ),
         Padding(
@@ -80,13 +77,14 @@ class SubscribedCoaches extends StatelessWidget {
                                     final userModel = userModelList[index];
                                     return GestureDetector(
                                       onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    PublicProfile(
-                                                      userModel: userModel,
-                                                    )));
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) => PublicProfile(
+                                        //       userModel: userModel,
+                                        //     ),
+                                        //   ),
+                                        // );
                                       },
                                       child: Stack(
                                         children: [
@@ -127,11 +125,15 @@ class SubscribedCoaches extends StatelessWidget {
                                                         NetworkImage(
                                                             userModel.photoUrl),
                                                   ),
-                                                  Text(
-                                                    userModel.firstName,
-                                                    style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20,
+                                                  Expanded(
+                                                    child: Text(
+                                                      userModel.firstName,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 20,
+                                                      ),
                                                     ),
                                                   ),
                                                 ],

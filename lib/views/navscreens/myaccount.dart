@@ -381,10 +381,10 @@ class _ClientAccountState extends State<ClientAccount> {
                                           const ForgetPass()));
                             },
                           ),
-                          LargeButtonTransparentLeftAlignText(
-                            name: "Settings",
-                            onPressed: () {},
-                          ),
+                          // LargeButtonTransparentLeftAlignText(
+                          //   name: "Settings",
+                          //   onPressed: () {},
+                          // ),
                         ],
                       ),
                     ),

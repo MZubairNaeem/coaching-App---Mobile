@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:coachingapp/providers/get_user_type.dart';
 import 'package:coachingapp/views/subscribed_coaches.dart';
 import 'package:coachingapp/widgets/large_button_trasparent_text_left_align.dart';
@@ -19,6 +21,21 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   //  final FirebaseAuth _auth = FirebaseAuth.instance;
   // User? userr = _auth.currentUser;
+  String privacyPolicy = " Some Error Occured";
+
+  getPrivacyPolicy() async {
+    String responce = await DefaultAssetBundle.of(context)
+        .loadString("assets/privacypolicy.txt");
+    setState(() {
+      privacyPolicy = responce;
+    });
+  }
+
+@override
+  void initState() {
+    getPrivacyPolicy();
+    super.initState();
+  }
   User? user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
@@ -159,28 +176,52 @@ class _ProfileState extends State<Profile> {
                                           const SubscribedCoaches()));
                             },
                           ),
-                          LargeButtonTransparentLeftAlignText(
-                            name: "My Tracking",
-                            onPressed: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) =>
-                              //             const Subscription()));
-                            },
-                          ),
+                          // LargeButtonTransparentLeftAlignText(
+                          //   name: "My Tracking",
+                          //   onPressed: () {
+                          //     // Navigator.push(
+                          //     //     context,
+                          //     //     MaterialPageRoute(
+                          //     //         builder: (context) =>
+                          //     //             const Subscription()));
+                          //   },
+                          // ),
                           const SizedBox(
                             height: 20,
                           ),
                           LargeButtonTransparentLeftAlignText(
                             name: "Help Center",
-                            onPressed: () {
-                             
-                            },
+                            onPressed: () {},
                           ),
                           LargeButtonTransparentLeftAlignText(
                             name: "Privacy Policy",
-                            onPressed: () {},
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  // final privacyPolicyFile =
+                                  //     File('assets/privacypolicy.txt');
+                                  // final privacyPolicyText =
+                                  //     privacyPolicyFile.readAsStringSync();
+
+                                  return AlertDialog(
+                                    title: Text('Privacy Policy'),
+                                    content: SingleChildScrollView(
+                                      child: Text(privacyPolicy),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(); // Close the dialog
+                                        },
+                                        child: Text('Close'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
                           ),
                           LargeButtonTransparentLeftAlignText(
                             name: "Terms and Services",

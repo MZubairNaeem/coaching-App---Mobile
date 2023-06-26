@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../utils/colors.dart';
 import '../../providers/get_coaches.dart';
 import '../public_profile.dart';
+import 'myaccount.dart';
 
 class CoachFind extends StatefulWidget {
   const CoachFind({Key? key}) : super(key: key);
@@ -80,11 +81,19 @@ class _CoachFindState extends State<CoachFind> {
           ),
           actions: [
             Padding(
-              padding: EdgeInsets.only(right: screenWidth * 0.1),
-              child: Icon(
-                Icons.notifications_none_outlined,
-                color: AppColors().darKShadowColor,
-                size: 28,
+              padding: EdgeInsets.only(right: screenWidth * 0.05),
+              child: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ClientAccount()));
+                },
+                icon: Icon(
+                  Icons.person_rounded,
+                  color: AppColors().darKShadowColor,
+                  size: 28,
+                ),
               ),
             ),
           ],
