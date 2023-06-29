@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coachingapp/models/user.dart';
 import 'package:coachingapp/viewmodels/auth.dart';
 import 'package:coachingapp/views/navscreens/chat/chat_list.dart';
+import 'package:coachingapp/views/subscription/client_subs_coach.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -119,9 +120,18 @@ class _PublicProfileState extends State<PublicProfile> {
                                         ? const Icon(Icons.check)
                                         : GestureDetector(
                                             onTap: () {
-                                              Auth().Subscirbe(
-                                                  widget.userModel.uid);
-                                              ref.refresh(subscriptionProvider);
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                           ClientSubCoach(
+                                                              uid: widget
+                                                                  .userModel
+                                                                  .uid
+                                                          )));
+                                              // Auth().Subscirbe(
+                                              //     widget.userModel.uid);
+                                              // ref.refresh(subscriptionProvider);
                                             },
                                             child: const Icon(Icons.add),
                                           ),
@@ -356,7 +366,7 @@ class _PublicProfileState extends State<PublicProfile> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -370,10 +380,10 @@ class _PublicProfileState extends State<PublicProfile> {
                         data: (userModel) {
                           return Column(
                             children: [
-                              Text("Followers"),
+                              const Text("Followers"),
                               Text(
                                 followers.toString(),
-                                style: TextStyle(fontSize: 28),
+                                style: const TextStyle(fontSize: 28),
                               ),
                             ],
                           );
@@ -390,10 +400,10 @@ class _PublicProfileState extends State<PublicProfile> {
                               data: (userModel) {
                                 return Column(
                                   children: [
-                                    Text("Experince"),
+                                    const Text("Experince"),
                                     Text(
                                       userModel.experience.toString(),
-                                      style: TextStyle(fontSize: 28),
+                                      style: const TextStyle(fontSize: 28),
                                     ),
                                   ],
                                 );
@@ -405,10 +415,10 @@ class _PublicProfileState extends State<PublicProfile> {
                           })
                         : Column(
                             children: [
-                              Text("Experince"),
+                              const Text("Experince"),
                               Text(
                                 widget.userModel.experience.toString(),
-                                style: TextStyle(fontSize: 28),
+                                style: const TextStyle(fontSize: 28),
                               ),
                             ],
                           ),
@@ -420,10 +430,10 @@ class _PublicProfileState extends State<PublicProfile> {
                               data: (userModel) {
                                 return Column(
                                   children: [
-                                    Text("Projects"),
+                                    const Text("Projects"),
                                     Text(
                                       userModel.projects.toString(),
-                                      style: TextStyle(fontSize: 28),
+                                      style: const TextStyle(fontSize: 28),
                                     ),
                                   ],
                                 );
@@ -435,10 +445,10 @@ class _PublicProfileState extends State<PublicProfile> {
                           })
                         : Column(
                             children: [
-                              Text("Projects"),
+                              const Text("Projects"),
                               Text(
                                 widget.userModel.projects.toString(),
-                                style: TextStyle(fontSize: 28),
+                                style: const TextStyle(fontSize: 28),
                               ),
                             ],
                           ),

@@ -361,7 +361,7 @@ class _ClientSignupState extends State<ClientSignup> {
                                             Icons.location_on,
                                             color: AppColors().darKShadowColor,
                                           ),
-                                          hint: Text('Select Location'),
+                                          hint: const Text('Select Location'),
                                           items: item
                                               .map((e) => DropdownMenuItem(
                                                     value: e,

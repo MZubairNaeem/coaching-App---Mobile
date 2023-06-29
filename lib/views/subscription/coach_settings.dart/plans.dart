@@ -127,7 +127,7 @@ class _PlanDescriptionState extends State<PlanDescription> {
                                       data[index].timeline.toString(),
                                     ),
                                     subtitle: Text(
-                                      data[index].price.toString() + ' ' + '\$',
+                                      '${data[index].price} \$',
                                     ),
                                     trailing: IconButton(
                                       icon: const Icon(Icons.delete),

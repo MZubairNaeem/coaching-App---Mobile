@@ -4,7 +4,6 @@ import 'package:coachingapp/utils/colors.dart';
 import 'package:coachingapp/views/navscreens/schedule/playvideos.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../providers/get_schedule_notification.dart';
 
@@ -35,7 +34,7 @@ class _ClientNotificationState extends State<ClientNotification> {
                   fontWeight: FontWeight.w600,
                   fontSize: 22),
             ),
-            content: Text("Are you sure you want to exit?"),
+            content: const Text("Are you sure you want to exit?"),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(true),
@@ -191,10 +190,10 @@ class _ClientNotificationState extends State<ClientNotification> {
                                                         );
                                                       } else if (snapshot
                                                           .hasError) {
-                                                        return Text(
+                                                        return const Text(
                                                             'Error retrieving schedule title');
                                                       } else {
-                                                        return Text(
+                                                        return const Text(
                                                             'Loading...');
                                                       }
                                                     },

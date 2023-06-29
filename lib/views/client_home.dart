@@ -50,7 +50,7 @@ class _HomeClientState extends State<ClientHome> {
                   fontWeight: FontWeight.w600,
                   fontSize: 22),
             ),
-            content: Text("Are you sure you want to exit?"),
+            content: const Text("Are you sure you want to exit?"),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(true),

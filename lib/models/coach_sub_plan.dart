@@ -1,4 +1,3 @@
-import '../main.dart';
 
 class CoachSubPlanModel {
   String? coachId;

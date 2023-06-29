@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:coachingapp/providers/get_user_type.dart';
 import 'package:coachingapp/views/subscribed_coaches.dart';
@@ -205,7 +204,7 @@ class _ProfileState extends State<Profile> {
                                   //     privacyPolicyFile.readAsStringSync();
 
                                   return AlertDialog(
-                                    title: Text('Privacy Policy'),
+                                    title: const Text('Privacy Policy'),
                                     content: SingleChildScrollView(
                                       child: Text(privacyPolicy),
                                     ),
@@ -215,7 +214,7 @@ class _ProfileState extends State<Profile> {
                                           Navigator.of(context)
                                               .pop(); // Close the dialog
                                         },
-                                        child: Text('Close'),
+                                        child: const Text('Close'),
                                       ),
                                     ],
                                   );

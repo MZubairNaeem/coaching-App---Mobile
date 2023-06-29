@@ -21,11 +21,23 @@ class CoachProfile extends StatefulWidget {
 class _CoachProfileState extends State<CoachProfile> {
   String finalKey = '';
   UserModel? userModel;
+  String privacyPolicy = " Some Error Occured";
+
+  getPrivacyPolicy() async {
+    String responce = await DefaultAssetBundle.of(context)
+        .loadString("assets/privacypolicy.txt");
+    setState(() {
+      privacyPolicy = responce;
+    });
+  }
+
+
   // String finalEmail = '';
   @override
   void initState() {
     super.initState();
     getValidationKey();
+    getPrivacyPolicy();
     print(finalKey);
     // _getUserType().then((userType) {
     //   setState(() {
@@ -68,7 +80,7 @@ class _CoachProfileState extends State<CoachProfile> {
                       borderRadius: const BorderRadius.only(
                           bottomRight: Radius.circular(50))),
                   child: Padding(
-                    padding: EdgeInsets.only(bottom: 8.0),
+                    padding: const EdgeInsets.only(bottom: 8.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -213,7 +225,33 @@ class _CoachProfileState extends State<CoachProfile> {
                           ),
                           LargeButtonTransparentLeftAlignText(
                             name: "Privacy Policy",
-                            onPressed: () {},
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  // final privacyPolicyFile =
+                                  //     File('assets/privacypolicy.txt');
+                                  // final privacyPolicyText =
+                                  //     privacyPolicyFile.readAsStringSync();
+
+                                  return AlertDialog(
+                                    title: const Text('Privacy Policy'),
+                                    content: SingleChildScrollView(
+                                      child: Text(privacyPolicy),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(); // Close the dialog
+                                        },
+                                        child: const Text('Close'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
                           ),
                           LargeButtonTransparentLeftAlignText(
                             name: "Terms and Services",

@@ -4,7 +4,6 @@ import 'package:coachingapp/utils/strings.dart';
 import 'package:coachingapp/views/auth/login.dart';
 import 'package:coachingapp/views/coach_home.dart';
 import 'package:coachingapp/views/client_home.dart';
-import 'package:coachingapp/views/subscription/coach_app_subscription/coach_app_sub.dart';
 import 'package:coachingapp/widgets/large_button_blue.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

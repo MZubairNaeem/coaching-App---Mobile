@@ -11,6 +11,7 @@ import '../../../providers/get_demoVideos.dart';
 import '../../../providers/get_user_type.dart';
 import '../../../utils/colors.dart';
 import '../../../widgets/demo_video_player.dart';
+import '../../public_profile.dart';
 
 class CoachProfilePreview extends StatefulWidget {
   const CoachProfilePreview({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class _CoachProfilePreviewState extends State<CoachProfilePreview> {
   Future<CoachAppSubModel> getCoachAppSubData(String uid) async {
     CoachAppSubModel coachAppSub =
         await FirebaseHelper.getCoachSubModelById(uid);
-      coachAppSubModel = coachAppSub;
+    coachAppSubModel = coachAppSub;
     return coachAppSub;
   }
 
@@ -67,7 +68,7 @@ class _CoachProfilePreviewState extends State<CoachProfilePreview> {
                     fontWeight: FontWeight.w600,
                     fontSize: 22),
               ),
-              content: Text("Are you sure you want to exit?"),
+              content: const Text("Are you sure you want to exit?"),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
@@ -141,10 +142,20 @@ class _CoachProfilePreviewState extends State<CoachProfilePreview> {
             actions: [
               Padding(
                 padding: EdgeInsets.only(right: screenWidth * 0.1),
-                child: Icon(
-                  Icons.notifications_none_outlined,
-                  color: AppColors().darKShadowColor,
-                  size: 28,
+                child: IconButton(
+                  onPressed: () {
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => PublicProfile(
+                    //               userModel: userModel,
+                    //             )));
+                  },
+                  icon: Icon(
+                    Icons.person_rounded,
+                    color: AppColors().darKShadowColor,
+                    size: 28,
+                  ),
                 ),
               ),
             ],
